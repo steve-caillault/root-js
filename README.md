@@ -83,9 +83,9 @@ fonction d'initialisation de RootJS, mais cela permet d'avoir un seul point d'en
 La classe AjaxRequestRJS permet d'exécuter une requête en Ajax. Le contructeur d'une requête prend en entrée un objet JSON. 
 
 Méthode
- 
-    constructor(options)
 
+    constructor(options)
+    
  Paramètre
  
     object options : objet JSON des paramètres de la requête.
@@ -679,3 +679,384 @@ element.setProperty("text", "Texte modifié");
 ````
 
 Dans l'exemple précédent, le texte du paragraphe a été modifié et la propriété *data-modified* a été affectée.
+
+### setProperty <a id="element-rjs-set-property"></a>
+
+La méthode *setProperty* permet de changer la valeur d'une propriété. Le premier paramètre correspond à la propriété, le deuxième à la valeur. La méthode retourne l'objet courant. 
+
+Méthode
+
+    setProperty(property, value)
+    
+Paramètres
+
+    string property : nom de la propriété à modifier.
+    mixed value : valeur de la propriété.
+
+Retour
+
+    ElementRJS : l'élément courant.
+    
+````html
+<p data-type="paragraph">Texte</p>
+````
+
+````javascript
+let element = ElementRJS.searchOne("p"); 
+element.setProperty("data-modified", 1); 
+element.setProperty("text", "Texte modifié");     
+````
+
+Dans l'exemple précédent, le texte du paragraphe a été modifié et la propriété *data-modified* a été affectée.
+
+### constructor <a id="element-rjs-constructor"></a>
+
+Le premier paramètre du constructeur d'un objet *ElementRJS* est le nom de la balise *HTML* (*a*, *p*, *table*...). Le deuxième paramètre est un objet *JSON* des propriétés à affecter à la balise. 
+
+Méthode
+
+    constructor(tagName, attributes, htmlElement)
+    
+Paramètres
+
+    string tagName : nom de la balise (a, img, p).
+    object attributes : objet JSON des propriétés de la balise.
+    HTMLElement htmlElement : objet HTMLElement utilisé pour instancier un objet ElementRJS (utilisé par la méthode retrieve).
+
+````javascript
+let element = new ElementRJS("div", { 
+  "class": "menu" 
+}); 
+````
+
+### addElement <a id="element-rjs-add-element"></a>
+
+La méthode *addElement* permet d'ajout un élément au DOM. Le premier paramètre est l'élément à ajouter à l'élément courant. Le deuxième paramètre est la position où placer l'élément par rapport à l'élément courant. Les positions disponibles sont *before*, *after*, *top* et *bottom*. Par défaut, l'élément sera ajouté après le dernier enfant de l'élément courant. 
+
+Méthode
+
+    addElement(element, position)
+
+Paramètre
+
+    ElementRJS element : objet ElementRJS à ajouter.
+    string position : position où ajouter l'élément en paramètre par rapport à l'objet courant. Les valeurs before, after, top et bottom sont autorisées.
+
+Retour
+
+    ElementRJS : l'élément courant.
+    
+````html
+<div class="menu"> 
+  <ul> 
+    <li>Item 1</li> 
+    <li>Item 2</li> 
+    <li>Item 3</li> 
+  </ul> 
+</div> 
+````
+
+````javascript
+let
+  ul = ElementRJS.searchOne("div.menu ul"), 
+  menuItem = new ElementRJS("li", { 
+    "class": "selected", 
+    "text": "Nouveau menu" 
+  })
+; 
+ul.addElement(menuItem, "top"); 
+````
+
+L'exemple précédent ajoute un élément *li* en première position au menu.
+
+### remove <a id="element-rjs-remove"></a>
+
+La méthode *remove* permet de supprimer l'élément courant du DOM.
+
+````html
+<div class="page"> 
+  <p>Texte</p> 
+</div> 
+````
+
+````javascript
+let element = ElementRJS.searchOne("p"); 
+element.remove(); 
+````
+
+Dans l'exemple précédent, la balise *p* a été supprimée.
+
+### removeChild <a id="element-rjs-remove-child"></a>
+
+La méthode *removeChild* permet de supprimer l'objet *ElementRJS* donné en paramètre de l'élément courant. 
+
+Méthode
+
+    removeChild(element)
+    
+Paramètre
+
+    ElementRJS element : objet ElementRJS à supprimer.
+
+Retour
+
+    ElementRJS : l'élément courant.
+    
+````html
+<div class="menu"> 
+  <ul> 
+    <li>Item 1</li> 
+    <li>Item 2</li> 
+    <li>Item 3</li> 
+  </ul> 
+</div>
+````
+
+````javascript
+let 
+  menu = ElementRJS.searchOne("div.menu"), 
+  li = menu.getChild("li") 
+; 
+menu.removeChild(li); 
+````
+
+Dans l'exemple précédent, le premier élément *li* a été supprimé.
+
+### removeChildren <a id="element-rjs-remove-children"></a>
+
+La méthode *removeChildren* supprime tous les enfants de l'élément courant.
+
+Méthode
+
+    removeChildren()
+    
+Retour
+
+    ElementRJS : l'élément courant.
+
+````html
+<div class="menu"> 
+  <ul> 
+    <li>Item 1</li> 
+    <li>Item 2</li> 
+    <li>Item 3</li> 
+  </ul> 
+</div> 
+````
+
+````javascript
+let ul = ElementRJS.searchOne("div.menu ul"); 
+ul.removeChildren(); 
+````
+
+Dans l'exemple précédent, tous les éléments *li* ont été supprimé.
+
+### addEvent <a id="element-rjs-add-event"></a>
+
+La méthode *addEvent* permet d'ajouter un événement à l'élément courant. Le premier paramètre est le type d'événement (*click*, *change*, *blur*, *mouseover*...). Le deuxième paramètre est la fonction appelée lors de l'exécution de l'événement, elle prend en paramètre un objet *Event*. 
+
+Méthode
+
+    addEvent(event, callback)
+    
+Paramètres
+
+    string event : nom de l'événement.
+    function callback : fonction à appeler lors de l'événement.
+
+Retour
+
+    ElementRJS : l'élément courant.
+
+````html
+<a href="#" title="">Lien</a>
+````
+
+````javascript
+let anchor = ElementRJS.searchOne("a"); 
+anchor.addEvent("click", function(event) { 
+  event.preventDefault(); 
+  element = ElementRJS.retrieve(this); 
+  element.addClass("active"); 
+}); 
+````
+
+Dans l'exemple précédent, la classe *active* est ajoutée à l'ancre lors du clic.
+
+### fireEvent <a id="element-rjs-fire-event"></a>
+
+La méthode *fireEvent* permet de déclencher un événement. Le premier paramètre est le type d'événement. 
+
+Méthode
+
+    fireEvent(event)
+    
+Paramètre
+
+    string event : nom de l'événement.
+
+Retour
+
+    ElementRJS : l'élément courant.
+    
+````html
+<a href="#" title="">Lien</a>
+````
+
+````javascript
+let anchor = ElementRJS.searchOne("a"); 
+anchor.addEvent("addLog", function(event) { 
+  let 
+    link = ElementRJS.retrieve(this), 
+    paragraph = new ElementRJS("p", { 
+      "text": "Nouveau clic" 
+    }) 
+  ; 
+  anchor.addElement(paragraph, "after"); 
+}); 
+
+anchor.addEvent("click", function(event) { 
+  event.preventDefault(); 
+  let link = ElementRJS.retrieve(this); 
+  link.fireEvent("addLog"); 
+}); 
+````
+
+L'exemple précédent ajoute un paragraphe avec le texte *Nouveau clic* à chaque clic sur l'ancre.
+
+### getStyle <a id="element-rjs-get-style"></a>
+
+La méthode *getStyle* permet de récupérer la valeur d'une propriété *CSS*. La méthode prend en entrée le nom de la propriété et retourne la valeur *CSS* correspondante, ou *null* si la valeur n'a pas été trouvée.
+
+Méthode
+
+    getStyle(key)
+    
+Paramètre
+
+    string key : nom de la propriété CSS.
+
+Retour
+
+    string | null : la valeur de la propriété.
+    
+````html
+<a href="#" title="">Lien</a>
+````
+
+ ````javascript
+let 
+  anchor = ElementRJS.searchOne("a"), 
+  color = anchor.getStyle("color") 
+; 
+````
+    
+L'exemple précédent retourne la couleur de l'ancre.    
+
+### setStyles <a id="element-rjs-set-styles"></a>
+
+La méthode *setStyles* permet de modifier les styles d'un élément. Elle prend en entrée un objet *JSON* des styles à appliquer. 
+
+Méthode
+
+    setStyles(styles)
+    
+Paramètre
+
+    object styles : objet JSON des styles à appliquer.
+
+Retour
+
+    ElementRJS : l'élément courant.
+
+````html
+<a href="#" title="">Lien</a>
+````
+
+````javascript
+let anchor = ElementRJS.searchOne("a"); 
+anchor.setStyles({ 
+  "text-decoration": "none", 
+  "color": "gray" 
+}); 
+````
+
+L'exemple précédent modifit la couleur et le surlignage de l'ancre.
+
+### computeOffset <a id="element-rjs-compute-offset"></a>
+
+La méthode *computeOffset* calcul le décalage vertical ou horizontal de l'élément courant par rapport au début de la page. La méthode prend en entrée la valeur *top* pour le décalage vertical ou *left* pour le décalage horizontal. La méthode retourne le nombre de pixels correspond au décalage. 
+
+Méthode
+
+    computeOffset(property)
+    
+Paramètre
+
+    string property : top pour calculer le décalage vertical et left pour calculer le décalage horizontal.
+
+Retour
+
+    float : décalage de l'élément par rapport au début de la page, en pixels.
+
+````html
+<div class="menu"> 
+  <ul> 
+    <li>Item 1</li> 
+    <li>Item 2</li> 
+    <li>Item 3</li> 
+  </ul> 
+</div> 
+````
+
+````javascript
+let 
+  li = ElementRJS.searchOne("li:nth-child(3)"), 
+  offsetTop = li.computeOffset("top") 
+; 
+````
+
+L'exemple précédent calcul le décalage vertical du troisième élément *li*. 
+
+### changeScroll <a id="element-rjs-change-scroll"></a>
+
+La méthode *changeScroll* permet de modifier les positions du défilement horizontal et vertical. La méthode prend en entrée un objet *JSON* avec les positions *left* et *top*. Les nouvelles positions doivent être des *float* correspondant à des valeurs en pixels. 
+
+Méthode
+
+    changeScroll(data)
+    
+Paramètre
+
+    object data : objet JSON des valeurs du défilement à changer.
+
+Retour
+
+    ElementRJS : l'élément courant.
+
+````html
+<div class="content"> 
+  <a href="#" class="top" title="Tester le décalage vertical.">Tester</a> 
+</div> 
+````
+
+````javascript
+let 
+  scrollingElement = ElementRJS.retrieve(document.scrollingElement), 
+  content = ElementRJS.searchOne("div.content"), 
+  anchorTop = content.getChild("a.top") 
+; 
+
+anchorTop.addEvent("click", function(event) { 
+  event.preventDefault(); 
+  content.setStyles({ 
+    "min-height": "2000px" 
+  }); 
+  
+  scrollingElement.changeScroll({ 
+    "top": content.getProperty("clientHeight") 
+  }); 
+}); 
+````
+
+Dans l'exemple précédent, le clic sur l'ancre modifit la hauteur de l'élément *div.content* pour que nous puissions tester le défilement. Le défilement se déplace ensuite en bas de page. 
