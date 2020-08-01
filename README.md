@@ -3,10 +3,11 @@
 La bibliothèque JavaScript RootJS propose une liste de classes permettant de faciliter :
 * les requêtes Ajax
 * la manipulation des éléments du DOM :
-	* recherche
+    * recherche
     * ajouts, suppressions
     * gestion des classes et des styles
     * gestion des attributs
+    * gestion des événements
     * gestion du défilement
     
 1. [Installation](#introduction)
@@ -73,14 +74,14 @@ document.addEventListener("DOMContentLoaded", function() {
 }, false);
 ```
 
-Une fois le document chargé, RootJS sera initialisé et la fonction initRootJS sera exécutée. Vous n'êtes pas obligé d'appeler la 
+Une fois le document chargé, RootJS sera initialisé et la fonction initRootJS sera exécutée. Vous n'êtes pas obligés d'appeler la 
 fonction d'initialisation de RootJS, mais cela permet d'avoir un seul point d'entrée.
 
 ### Requête Ajax <a id="ajax-request"></a>
 
 #### AjaxRequestRJS <a id="ajax-request-rjs"></a>
 
-La classe AjaxRequestRJS permet d'exécuter une requête en Ajax. Le contructeur d'une requête prend en entrée un objet JSON. 
+La classe *AjaxRequestRJS* permet d'exécuter une requête en *Ajax*. Le constructeur d'une requête prend en entrée un objet *JSON*. 
 
 Méthode
 
@@ -100,7 +101,7 @@ Méthode
 new AjaxRequestRJS({ 
   "url": "https://www.something.unk/", 
   "method": "post", 
-  "post": { 
+  "params": { 
     "param1": 10, 
     "param2": "test", 
     "param3": true 
@@ -119,7 +120,7 @@ new AjaxRequestRJS({
 
 #### JsonAjaxRequestRJS <a id="json-ajax-request-rjs"></a>
 
-La classe JsonAjaxRequestRJS permet de gérer un appel Ajax dont la réponse doit renvoyer du JSON. L'appel reste identique à la classe AjaxRequestRJS, il suffit d'utiliser la classe JsonAjaxRequestRJS à la place de la classe AjaxRequestRJS. 
+La classe *JsonAjaxRequestRJS* permet de gérer un appel *Ajax* dont la réponse doit renvoyer du *JSON*. L'appel reste identique à la classe <a href="#ajax-request-rjs">AjaxRequestRJS</a>, il suffit d'utiliser la classe *JsonAjaxRequestRJS* à la place de la classe *AjaxRequestRJS*. 
 
 Méthode
 
@@ -137,7 +138,7 @@ Paramètre
 
 #### UploadAjaxRequestRJS <a id="upload-ajax-request-rjs"></a>
 
-La classe UploadAjaxRequestRJS permet de faire un appel Ajax de téléchargement de fichier. La réponse doit être au format JSON. Vous ne pouvez envoyer que le fichier téléchargé en paramètre, vous ne pouvez pas cumuler d'autre paramètre. Il vous faudra donc avoir une adresse dédiée pour cela. 
+La classe *UploadAjaxRequestRJS* permet de faire un appel Ajax de téléchargement de fichier. La réponse doit être au format JSON. Vous ne pouvez envoyer que le fichier téléchargé en paramètre, vous ne pouvez pas cumuler d'autre paramètre. Il vous faudra donc avoir une adresse dédiée pour cela. 
 
 Méthode
 
@@ -192,7 +193,7 @@ Il est aussi possible d'attacher et de déclencher des événements aux élémen
 
 #### searchOne <a id="element-rjs-search-one"></a>
 
-La méthode statique searchOne permet de récupérer un élément du DOM. La méthode prend en entrée un sélecteur accepté par la méthode querySelector. Le deuxième paramètre peut être omis. Il permet de préciser l'élément parent de celui recherché. Par défaut le parent est document. Si l'élément a été trouvé, la méthode retourne un objet ElementRJS, null sinon. 
+La méthode statique *searchOne* permet de récupérer un élément du *DOM*. La méthode prend en entrée un sélecteur accepté par la méthode *querySelector*. Le deuxième paramètre peut être omis. Il permet de préciser l'élément parent de celui recherché. Par défaut le parent est *document*. Si l'élément a été trouvé, la méthode retourne un objet *ElementRJS*, *null* sinon. 
 
 Méthode
 
@@ -226,11 +227,11 @@ Le code précédent sélectionne l'élément *li* avec la classe *selected*.
 
 ### searchList <a id="element-rjs-search-list"></a>
 
-La méthode statique *searchList* permet de récupérer un tableau d'éléments du DOM. La liste des paramètres est la même que celle de la méthode <a id="#element-rjs-search-one">searchOne</a>. La méthode retourne un tableau d'objets *ElementRJS*. 
+La méthode statique *searchList* permet de récupérer un tableau d'éléments du *DOM*. La liste des paramètres est la même que celle de la méthode <a id="#element-rjs-search-one">searchOne</a>. La méthode retourne un tableau d'objets *ElementRJS*. 
 
 Méthode
 
-	static searchList(selector, root)
+    static searchList(selector, root)
 	
 Paramètres
 
@@ -293,7 +294,7 @@ ElementRJS.searchOne("a").addEvent("click", function(event) {
 }); 
 ````
 
-L'exemple précédent récupére l'objet ElementRJS correspond à l'ancre. 
+L'exemple précédent récupére l'objet *ElementRJS* correspond à l'ancre. 
 
 ### getPrevious <a id="element-rjs-get-previous"></a>
 
@@ -619,11 +620,11 @@ let anchor = ElementRJS.searchOne("a");
 anchor.removeClass("link"); 
 ````
 
-Dans l'exemple précédent, la classe *link* a été enlevé de l'élément *anchor*.
+Dans l'exemple précédent, la classe *link* a été enlevée de l'élément *anchor*.
 
 ### getProperty <a id="element-rjs-get-property"></a>
 
-La méthode *getProperty* retourne la valeur dont la propriété est donnée en paramètre. Le paramètre en entrée doit être une chaine de caractères. La méthode retourne la valeur si elle a été trouvé et *null* sinon. 
+La méthode *getProperty* retourne la valeur dont la propriété est donnée en paramètre. Le paramètre en entrée doit être une chaine de caractères. La méthode retourne la valeur si elle a été trouvée et *null* sinon. 
 
 Méthode
 
@@ -649,7 +650,7 @@ let
 ; 
 ````
 
-Dans l'exemple précédent, la variable *elementType* vaut *paragraph*, la variable e*lementText* vaut *Texte*.
+Dans l'exemple précédent, la variable *elementType* vaut *paragraph*, la variable *elementText* vaut *Texte*.
 
 ### setProperty <a id="element-rjs-set-property"></a>
 
@@ -731,7 +732,7 @@ let element = new ElementRJS("div", {
 
 ### addElement <a id="element-rjs-add-element"></a>
 
-La méthode *addElement* permet d'ajout un élément au DOM. Le premier paramètre est l'élément à ajouter à l'élément courant. Le deuxième paramètre est la position où placer l'élément par rapport à l'élément courant. Les positions disponibles sont *before*, *after*, *top* et *bottom*. Par défaut, l'élément sera ajouté après le dernier enfant de l'élément courant. 
+La méthode *addElement* permet d'ajouter un élément au *DOM*. Le premier paramètre est l'élément à ajouter à l'élément courant. Le deuxième paramètre est la position où placer l'élément par rapport à l'élément courant. Les positions disponibles sont *before*, *after*, *top* et *bottom*. Par défaut, l'élément sera ajouté après le dernier enfant de l'élément courant. 
 
 Méthode
 
@@ -771,7 +772,7 @@ L'exemple précédent ajoute un élément *li* en première position au menu.
 
 ### remove <a id="element-rjs-remove"></a>
 
-La méthode *remove* permet de supprimer l'élément courant du DOM.
+La méthode *remove* permet de supprimer l'élément courant du *DOM*.
 
 ````html
 <div class="page"> 
@@ -849,7 +850,7 @@ let ul = ElementRJS.searchOne("div.menu ul");
 ul.removeChildren(); 
 ````
 
-Dans l'exemple précédent, tous les éléments *li* ont été supprimé.
+Dans l'exemple précédent, tous les éléments *li* ont été supprimés.
 
 ### addEvent <a id="element-rjs-add-event"></a>
 
