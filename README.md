@@ -138,7 +138,7 @@ Paramètre
 
 #### UploadAjaxRequestRJS <a id="upload-ajax-request-rjs"></a>
 
-La classe *UploadAjaxRequestRJS* permet de faire un appel Ajax de téléchargement de fichier. La réponse doit être au format JSON. Vous ne pouvez envoyer que le fichier téléchargé en paramètre, vous ne pouvez pas cumuler d'autre paramètre. Il vous faudra donc avoir une adresse dédiée pour cela. 
+La classe *UploadAjaxRequestRJS* permet de faire un appel Ajax de téléchargement de fichier. La réponse doit être au format JSON.
 
 Méthode
 
@@ -148,7 +148,6 @@ Paramètre
 
     object options : objet JSON des paramètres de la requête.
         string url : adresse à appeler.
-        string method : méthode HTTP à utiliser. Par défaut, la valeur est get. Les méthodes get et post sont autorisées.
         object params : objet JSON des paramètres à transmettre en Ajax.
         function onComplete : fonction à appeler lorsque l'appel est terminé.
         function onSuccess : fonction à appeler lorsque la réponse renvoie un code HTTP 200. Prend en entrée la réponse de l'appel.
@@ -167,7 +166,6 @@ inputFile.addEvent("change", function() {
   }; 
   new UploadAjaxRequestRJS({ 
     "url": "upload.php", 
-    "method": "post", 
     "params": formData, 
     "onProgress": function(event) { 
       let percent = 100 * ((event.total != 0) ? (event.loaded / event.total) : 0); 

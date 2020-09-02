@@ -6,7 +6,6 @@ $params = ${ '_' . $method};
 $type = ($params['type'] ?? 'text');
 $withError = (bool) ($params['with-error'] ?? FALSE);
 
-
 if($withError)
 {
 	http_response_code(400);
@@ -28,5 +27,10 @@ elseif($type == 'json')
 		$data['error'] = TRUE;
 	}
 	
+	exit(json_encode($data));
+}
+elseif($type == 'upload-file')
+{
+	$data = $_FILES;
 	exit(json_encode($data));
 }

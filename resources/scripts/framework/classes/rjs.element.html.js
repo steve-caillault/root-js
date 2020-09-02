@@ -414,6 +414,7 @@ class ElementRJS {
 	 * @return self
 	 */
 	removeClass(classToDelete) {
+		this._htmlElementRequired();
 		this.htmlElement.classList.remove(classToDelete);
 		this.setProperty('class', this.htmlElement.className);
 		return this;
@@ -530,6 +531,8 @@ class ElementRJS {
 	 * @return self
 	 */
 	setStyles(newStyles) {
+		this._htmlElementRequired();
+		
 		let styles = this.getProperty('style');
 		
 		Object.keys(newStyles).forEach(function(property) {

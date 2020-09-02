@@ -12,7 +12,10 @@ var initRootJS = function() {
 	// Test Ajax
 	// Succès Texte
 	(new AjaxRequestRJS({
-		'url': 'ajax.php?type=text',
+		'url': 'ajax.php',
+		'params': {
+			'type': 'text'
+		},
 		'onComplete': function() {
 			console.log('AjaxRequest 1 complete');
 		},
@@ -20,6 +23,7 @@ var initRootJS = function() {
 			console.log('AjaxRequest 1 success : ' + response);
 		}
 	}));
+	
 	// Echec texte 1
 	(new AjaxRequestRJS({
 		'url': 'ajax2.php?type=text',
@@ -153,12 +157,12 @@ var initRootJS = function() {
 	
 	// Tests sur les événements
 	
-	contentDiv.getChild('p[data-text]').addEvent('begin-taping', function(event) {
+	parent.getChild('p[data-text]').addEvent('begin-taping', function(event) {
 		let element = ElementRJS.retrieve(this);
 		element.setProperty('text', 'Ecriture en cours...');
 	});
 	
-	contentDiv.getChild('p[data-text]').addEvent('end-taping', function(event) {
+	parent.getChild('p[data-text]').addEvent('end-taping', function(event) {
 		let element = ElementRJS.retrieve(this);
 		element.setProperty('text', element.getProperty('data-text'));
 	});
@@ -183,7 +187,7 @@ var initRootJS = function() {
 	});
 	
 	// Test de suppression d'élément
-	contentDiv.getLast('p').remove();
+	parent.getLast('p').remove();
 	
 	// Test de suppression d'un enfant
 	let childToDeleted = menu.getChild('li.selected');
@@ -236,14 +240,19 @@ var initRootJS = function() {
 	contentDiv.addElement(buttonOffsetLeftControl);
 	
 	let inputFile = ElementRJS.searchOne('input[type=file]');
+	console.log(inputFile);
 	inputFile.addEvent('change', function() {
-		let formData = {
+		let formData = new FormData;
+		formData.append('file', ElementRJS.retrieve(this).getProperty('files')[0]);
+		formData.append('type', 'upload-file');
+		
+		/*let formData = {
+			type: 'upload-file',
 			file: ElementRJS.retrieve(this).getProperty('files')[0]
-		};
+		};*/
 		
 		new UploadAjaxRequestRJS({
-			'url': 'upload.php',
-			'method': 'post',
+			'url': 'ajax.php',
 			'params': formData,
 			'onProgress': function(event) {
 				let percent = 100 * ((event.total != 0) ? (event.loaded / event.total) : 0);
