@@ -983,7 +983,7 @@ anchor.setStyles({
 
 L'exemple précédent modifit la couleur et le surlignage de l'ancre.
 
-### getOuterDimension <a id="#element-rjs-get-outer-dimension"></a>
+### getOuterDimension <a id="element-rjs-get-outer-dimension"></a>
 
 La méthode *getOuterDimension* permet de retourner la largeur ou la hauteur de l'élément y compris les marges extérieurs (*margin*), intérieurs (*padding*) et les bordures.
 
