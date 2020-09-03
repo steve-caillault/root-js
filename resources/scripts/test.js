@@ -168,7 +168,7 @@ var initRootJS = function() {
 	});
 	
 	input.addEvent('focus', function(event) {
-		contentDiv.getChild('p[data-text]').fireEvent('begin-taping');
+		parent.getChild('p[data-text]').fireEvent('begin-taping');
 		let currentElement = ElementRJS.retrieve(this);
 		currentElement.setStyles({
 			'color': 'red'
@@ -178,13 +178,20 @@ var initRootJS = function() {
 	});
 	
 	input.addEvent('blur', function(event) {
-		contentDiv.getChild('p[data-text]').fireEvent('end-taping');
+		parent.getChild('p[data-text]').fireEvent('end-taping');
 		let currentElement = ElementRJS.retrieve(this);
 		currentElement.setStyles({
 			'color': 'black'
 		});
 		console.log('Nouvelle couleur :', currentElement.getStyle('color'));
 	});
+	
+	// Test de récupération de dimension
+	let fullWidthParagraph = ElementRJS.searchOne('p').getOuterDimension('width'),
+		fullHeightParagraph = ElementRJS.searchOne('p').getOuterDimension('height')
+	;
+	console.log('Largeur avec marge du premier paragraphe : ' + fullWidthParagraph);
+	console.log('Hauteur avec marge du premier paragraphe : ' + fullHeightParagraph);
 	
 	// Test de suppression d'élément
 	parent.getLast('p').remove();
@@ -239,6 +246,7 @@ var initRootJS = function() {
 	
 	contentDiv.addElement(buttonOffsetLeftControl);
 	
+	// Test de téléchargement de fichier
 	let inputFile = ElementRJS.searchOne('input[type=file]');
 	console.log(inputFile);
 	inputFile.addEvent('change', function() {

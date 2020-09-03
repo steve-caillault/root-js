@@ -42,8 +42,9 @@ La bibliothèque JavaScript RootJS propose une liste de classes permettant de fa
       22. [fireEvent](#element-rjs-fire-event)
       23. [getStyle](#element-rjs-get-style)
       24. [setStyles](#element-rjs-set-styles)
-      25. [computeOffset](#element-rjs-compute-offset)
-      26. [changeScroll](#element-rjs-change-scroll)
+      25. [getOuterDimension](#element-rjs-get-outer-dimension)
+      26. [computeOffset](#element-rjs-compute-offset)
+      27. [changeScroll](#element-rjs-change-scroll)
 
 ## Installation <a id="introduction"></a>
 
@@ -981,6 +982,36 @@ anchor.setStyles({
 ````
 
 L'exemple précédent modifit la couleur et le surlignage de l'ancre.
+
+### getOuterDimension <a id="#element-rjs-get-outer-dimension"></a>
+
+La méthode *getOuterDimension* permet de retourner la largeur ou la hauteur de l'élément y compris les marges extérieurs (*margin*), intérieurs (*padding*) et les bordures.
+
+Méthode
+
+    getOuterDimension(property)
+    
+Paramètre
+
+    string property : width pour calculer la largeur, height pour calculer la hauteur.
+
+Retour
+
+    float : la valeur demandée en pixels.
+
+````html
+<p>Texte</p>
+````
+
+````javascript
+let 
+  element = ElementRJS.searchOne("p"),
+  width = element.getOuterDimension("width"),
+  height = element.getOuterDimension("height")
+;
+````
+
+L'exemple précédent calcul la largeur (variable *width*) et la hauteur (variable *height*) du paragraphe.
 
 ### computeOffset <a id="element-rjs-compute-offset"></a>
 

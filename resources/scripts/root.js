@@ -1009,7 +1009,7 @@ class ElementRJS {
 		
 		Object.keys(newStyles).forEach(function(property) {
 			let value = newStyles[property];
-			styles[property] = value;
+			styles.setProperty(property, value);
 		});
 		
 		return this;
@@ -1022,8 +1022,45 @@ class ElementRJS {
 	 */
 	getStyle(key) {
 		this._htmlElementRequired();
-		let styles = window.getComputedStyle(this.htmlElement);
-		return (styles[key] || null);
+		return (window.getComputedStyle(this.htmlElement).getPropertyValue(key) || null);
+	};
+	
+	/**
+	 * Retourne la dimension de l'élément en pixel avec ses marges
+	 * @param string property width|height
+	 * @return float
+	 */
+	getOuterDimension(property) {
+		this._htmlElementRequired();
+		
+		let self = this,
+			dimension = 0,
+			properties = {
+				width: {
+					left: 0,
+					right: 0
+				},
+				height: {
+					top: 0,
+					bottom: 0
+				}
+			}
+		; 
+		
+		if(Object.keys(properties).indexOf(property) == -1) {
+			throw 'Paramètre de getOuterDimension incorrect.';
+		}
+		
+		Object.keys(properties[property]).forEach(function(position) {
+			let styleValue = self.getStyle('margin-' + StringRJS.ucfirst(position)) || 0;
+			dimension += parseInt(StringRJS.replace(styleValue, {
+				'px': ''
+			}));
+		});
+		
+		dimension += (this.getProperty('offset' + StringRJS.ucfirst(property)) || 0);
+		
+		return dimension;
 	};
 	
 	/**
