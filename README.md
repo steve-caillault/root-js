@@ -302,11 +302,11 @@ La méthode *sameElement* vous permet de vérifier qu'un élément correspond à
 
 Méthode
 
-    sameElement(htmlElement)
+    sameElement(element)
 
 Paramètre
 
-    ElementRJ element : élément à comparer.
+    ElementRJS element : élément à comparer.
 
 Retour
 
