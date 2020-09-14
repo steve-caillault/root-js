@@ -621,6 +621,18 @@ class ElementRJS {
 	};
 	
 	/**
+	 * Retourne si l'élément en paramètre correspond à l'élément courant
+	 * @param self element
+	 * @return bool
+	 */
+	sameElement(element) {
+		this._htmlElementRequired();
+		element._htmlElementRequired();
+		
+		return (this.signature == element.signature);
+	};
+	
+	/**
 	 * Retourne l'élément précédent correspondant au sélecteur en paramètre
 	 * @param string selector
 	 * @return self
@@ -851,10 +863,13 @@ class ElementRJS {
 	 * @return Object
 	 */
 	events(event) {
+		
+	
 		var events = EventsRJS.listByElement[this.signature] || {};
 		if(event) {
 			events = (events[event] || []);
 		}
+		
 		return events;
 	};
 	

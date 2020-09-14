@@ -109,6 +109,14 @@ var initRootJS = function() {
 		last = parent.getLast('li')
 	;
 	
+	// Vérification sur le même élément
+	let contentDivSameElement = contentDiv.sameElement(ElementRJS.searchOne('div.content')),
+		contentDivNotSameElement = contentDiv.sameElement(ElementRJS.searchOne('li'))
+	;
+	
+	console.log('contentDiv.sameElement(ElementRJS.searchOne(\'div.content\') : ' + contentDivSameElement);
+	console.log('contentDiv.sameElement(ElementRJS.searchOne(\'li\') : ' + contentDivNotSameElement);
+	
 	// Test d'ajout d'éléments
 	parent.addElement(new ElementRJS('p', {
 		'text': 'Paragraphe en haut'

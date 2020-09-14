@@ -21,30 +21,31 @@ La bibliothèque JavaScript RootJS propose une liste de classes permettant de fa
       1. [searchOne](#element-rjs-search-one)
       2. [searchList](#element-rjs-search-list)
       3. [retrieve](#element-rjs-retrieve)
-      4. [getPrevious](#element-rjs-get-previous)
-      5. [getNext](#element-rjs-get-next)
-      6. [getParent](#element-rjs-get-parent)
-      7. [getChild](#element-rjs-get-child)
-      8. [getChildren](#element-rjs-get-children)
-      9. [getLast](#element-rjs-get-last)
-      10. [hasClass](#element-rjs-has-class)
-      11. [addClass](#element-rjs-add-class)
-      12. [addClasses](#element-rjs-add-classes)
-      13. [removeClass](#element-rjs-remove-class)
-      14. [getProperty](#element-rjs-get-property)
-      15. [setProperty](#element-rjs-set-property)
-      16. [constructor](#element-rjs-constructor)
-      17. [addElement](#element-rjs-add-element)
-      18. [remove](#element-rjs-remove)
-      19. [removeChild](#element-rjs-remove-child)
-      20. [removeChildren](#element-rjs-remove-children)
-      21. [addEvent](#element-rjs-add-event)
-      22. [fireEvent](#element-rjs-fire-event)
-      23. [getStyle](#element-rjs-get-style)
-      24. [setStyles](#element-rjs-set-styles)
-      25. [getOuterDimension](#element-rjs-get-outer-dimension)
-      26. [computeOffset](#element-rjs-compute-offset)
-      27. [changeScroll](#element-rjs-change-scroll)
+      4. [sameElement](#element-rjs-same-element)
+      5. [getPrevious](#element-rjs-get-previous)
+      6. [getNext](#element-rjs-get-next)
+      7. [getParent](#element-rjs-get-parent)
+      8. [getChild](#element-rjs-get-child)
+      9. [getChildren](#element-rjs-get-children)
+      10. [getLast](#element-rjs-get-last)
+      11. [hasClass](#element-rjs-has-class)
+      12. [addClass](#element-rjs-add-class)
+      13. [addClasses](#element-rjs-add-classes)
+      14. [removeClass](#element-rjs-remove-class)
+      15. [getProperty](#element-rjs-get-property)
+      16. [setProperty](#element-rjs-set-property)
+      17. [constructor](#element-rjs-constructor)
+      18. [addElement](#element-rjs-add-element)
+      19. [remove](#element-rjs-remove)
+      20. [removeChild](#element-rjs-remove-child)
+      21. [removeChildren](#element-rjs-remove-children)
+      22. [addEvent](#element-rjs-add-event)
+      23. [fireEvent](#element-rjs-fire-event)
+      24. [getStyle](#element-rjs-get-style)
+      25. [setStyles](#element-rjs-set-styles)
+      26. [getOuterDimension](#element-rjs-get-outer-dimension)
+      27. [computeOffset](#element-rjs-compute-offset)
+      28. [changeScroll](#element-rjs-change-scroll)
 
 ## Installation <a id="introduction"></a>
 
@@ -271,7 +272,7 @@ menuItems.forEach(function(li) {
 
 Dans certains cas vous aurez besoin de recupérer un objet *ElementRJS* alors que vous n'aurez qu'un élément *HTMLElement*. Cela peut être le cas lors de la gestion d'événement. Avec la méthode *ElementRJS.retrieve*, vous récupérez un objet *ElementRJS* qui vous permettra de manipuler l'objet. La méthode renvoie *null* si l'objet n'a pas été trouvé. 
 
- Méthode
+Méthode
 
     static retrieve(htmlElement)
 
@@ -294,6 +295,37 @@ ElementRJS.searchOne("a").addEvent("click", function(event) {
 ````
 
 L'exemple précédent récupére l'objet *ElementRJS* correspond à l'ancre. 
+
+### sameElement <a id="element-rjs-same-element"></a>
+
+La méthode *sameElement* vous permet de vérifier qu'un élément correspond à l'élément courant.
+
+Méthode
+
+    sameElement(htmlElement)
+
+Paramètre
+
+    ElementRJ element : élément à comparer.
+
+Retour
+
+    bool
+    
+````html
+<a href="#" title="">Lien</a>
+<p>Texte</p>
+````
+
+````javascript
+let anchor = ElementRJS.searchOne('a'),
+	pararagh = ElementRJS.searchOne('p'),
+	isSameAnchor = anchor.sameElement(ElementRJS.searchOne('a')),
+	isNotSameAnchor = anchor.sameElement(ElementRJS.searchOne('p'))
+;
+````
+
+L'exemple précédent stocke *true* dans la variable *isSameAnchor* et *false* dans la variable *isNotSameAnchor*. 
 
 ### getPrevious <a id="element-rjs-get-previous"></a>
 
