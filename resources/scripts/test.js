@@ -157,18 +157,20 @@ var initRootJS = function() {
 	
 	// Tests sur les événements
 	
-	parent.getChild('p[data-text]').addEvent('begin-taping', function(event) {
+	parent.getChild('p[data-text]').addEvent('begin-taping', function(param1, param2) {
 		let element = ElementRJS.retrieve(this);
+		console.log(param1);
+		console.log(param2)
 		element.setProperty('text', 'Ecriture en cours...');
 	});
 	
-	parent.getChild('p[data-text]').addEvent('end-taping', function(event) {
+	parent.getChild('p[data-text]').addEvent('end-taping', function() {
 		let element = ElementRJS.retrieve(this);
 		element.setProperty('text', element.getProperty('data-text'));
 	});
 	
 	input.addEvent('focus', function(event) {
-		parent.getChild('p[data-text]').fireEvent('begin-taping');
+		parent.getChild('p[data-text]').fireEvent('begin-taping', [ 'param1Value', 'param2Value' ]);
 		let currentElement = ElementRJS.retrieve(this);
 		currentElement.setStyles({
 			'color': 'red'

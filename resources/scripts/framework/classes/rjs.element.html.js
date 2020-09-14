@@ -18,10 +18,19 @@ EventsRJS = {
 		element.htmlElement.addEventListener(type, callback);
 	},
 	
-	fire: function(element, type) {
+	/**
+	 * Déclenche un événement du type en paramètre sur un élément
+	 * @param ElementRJS element Elément sur lequel déclencher l'événement
+	 * @param string type Nom de l'événement à déclencher
+	 * @param array params Paramètres à transmettre à la méthode d'appel
+	 * @return void
+	 */
+	fire: function(element, type, params) {
+		
 		var events = element.events(type);
+		
 		events.forEach(function(callback) {
-			callback.apply(element.htmlElement);
+			callback.apply(element.htmlElement, params);
 		});
 	}
 };
@@ -370,10 +379,13 @@ class ElementRJS {
 	 * @return Object
 	 */
 	events(event) {
+		
+	
 		var events = EventsRJS.listByElement[this.signature] || {};
 		if(event) {
 			events = (events[event] || []);
 		}
+		
 		return events;
 	};
 	
@@ -399,12 +411,12 @@ class ElementRJS {
 	/**
 	 * Déclenche un événement sur l'élément courant
 	 * @param string Event event
+	 * @param array Paramètres à transmettre à la méthode d'appel
 	 * @return self
 	 */
-	fireEvent(event) {
+	fireEvent(event, params = []) {
 		this._htmlElementRequired();
-		
-		EventsRJS.fire(this, event);
+		EventsRJS.fire(this, event, params || []);
 		return this;
 	};
 	

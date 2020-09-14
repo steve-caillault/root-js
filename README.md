@@ -894,6 +894,7 @@ Méthode
 Paramètre
 
     string event : nom de l'événement.
+    array params : liste des paramètres à transmettre à la fonction d'appel, si nécessaire.
 
 Retour
 
@@ -905,11 +906,11 @@ Retour
 
 ````javascript
 let anchor = ElementRJS.searchOne("a"); 
-anchor.addEvent("addLog", function(event) { 
+anchor.addEvent("addLog", function(message) { 
   let 
     link = ElementRJS.retrieve(this), 
     paragraph = new ElementRJS("p", { 
-      "text": "Nouveau clic" 
+      "text": message 
     }) 
   ; 
   anchor.addElement(paragraph, "after"); 
@@ -918,7 +919,7 @@ anchor.addEvent("addLog", function(event) {
 anchor.addEvent("click", function(event) { 
   event.preventDefault(); 
   let link = ElementRJS.retrieve(this); 
-  link.fireEvent("addLog"); 
+  link.fireEvent("addLog", [ 'Nouveau clic' ]); 
 }); 
 ````
 
