@@ -918,6 +918,7 @@ Dans l'exemple précédent, la classe *active* est ajoutée à l'ancre lors du c
 ### fireEvent <a id="element-rjs-fire-event"></a>
 
 La méthode *fireEvent* permet de déclencher un événement. Le premier paramètre est le type d'événement. 
+Le second paramètre est facultatif, il vous permet de transmettre une liste de paramètres à la fonction d'appel de l'événement.
 
 Méthode
 
