@@ -1,7 +1,7 @@
 /**
  * Classe gérant des entiers
  */
-class IntegerRJS  { 
+export default class Integer  { 
 	
 	/**
 	 * Retourne un entier entre les valeurs en paramètre

@@ -3,7 +3,7 @@
  * Contrôleur RootJS
  */
 
-class ControllerRJS {
+export default class Controller {
 	
 	// settings: null
 	

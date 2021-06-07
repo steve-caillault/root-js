@@ -1,7 +1,10 @@
 /**
  * Classe gérant des chaines de caractères
  */
-class StringRJS {
+
+import Integer from "Classes/Integer";
+
+export default class Str {
 	
 	/**
 	 * Retourne une chaine en remplaçant les clés du tableau replacePairs par ses valeurs dans la chaine de caractère 
@@ -29,21 +32,21 @@ class StringRJS {
 				'integer': { 'min': 48, 'max': 57 }
 			},
 			characterTypes = Object.keys(intervalsByType),
-			iteration = IntegerRJS.random(5, 10),
+			iteration = Integer.random(5, 10),
 			identifiers = [],
 			numberCharacters, characterType, intervals, i, j
 		;
 		
 		for(i = 0 ; i < iteration ; i++) {
-			numberCharacters = IntegerRJS.random(10, 20);
+			numberCharacters = Integer.random(10, 20);
 			for(j = 0 ; j < numberCharacters ; j++) {
-				characterType = characterTypes[IntegerRJS.random(0, characterTypes.length - 1)];
+				characterType = characterTypes[Integer.random(0, characterTypes.length - 1)];
 				
 				intervals = intervalsByType[characterType];
 				if(! identifiers[i]) {
 					identifiers[i] = '';
 				}
-				identifiers[i] += String.fromCharCode(IntegerRJS.random(intervals['min'], intervals['max']));
+				identifiers[i] += String.fromCharCode(Integer.random(intervals['min'], intervals['max']));
 			}
 		}
 		

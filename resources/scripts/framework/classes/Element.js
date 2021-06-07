@@ -1,7 +1,11 @@
 /**
  * Gestions des événements
  */
-EventsRJS = {
+
+import Str from "Classes/Str";
+import Animation from "Classes/Animation";
+
+let EventsRJS = {
 	listByElement: {},
 	
 	add: function(element, type, callback) {
@@ -20,7 +24,7 @@ EventsRJS = {
 	
 	/**
 	 * Déclenche un événement du type en paramètre sur un élément
-	 * @param ElementRJS element Elément sur lequel déclencher l'événement
+	 * @param Element element Elément sur lequel déclencher l'événement
 	 * @param string type Nom de l'événement à déclencher
 	 * @param array params Paramètres à transmettre à la méthode d'appel
 	 * @return void
@@ -38,7 +42,7 @@ EventsRJS = {
 /**
  * Création d'élément HTML
  */
-class ElementRJS {
+export default class Element {
 	
 	// tagName : null, 		// li, a, img, p
 	// attributes : null, 	// tableau des attributs
@@ -70,7 +74,7 @@ class ElementRJS {
 		}
 		
 		if(! this.htmlElement.rjsSignature) {
-			this.htmlElement.rjsSignature = StringRJS.uniqueId();
+			this.htmlElement.rjsSignature = Str.uniqueId();
 		}
 		
 		this.signature = this.htmlElement.rjsSignature;
@@ -117,7 +121,7 @@ class ElementRJS {
 		if(htmlElement === null) {
 			return null;
 		}
-		return ElementRJS.retrieve(htmlElement);
+		return Element.retrieve(htmlElement);
 	};
 	
 	/**
@@ -134,7 +138,7 @@ class ElementRJS {
 		;
 		
 		nodeList.forEach(function(element) {
-			elements.push(ElementRJS.retrieve(element));
+			elements.push(Element.retrieve(element));
 		});
 
 		return elements;
@@ -172,7 +176,7 @@ class ElementRJS {
 	
 		while(element) {
 			if(element.matches(selector)) {
-				return ElementRJS.retrieve(element);
+				return Element.retrieve(element);
 			}
 			element = element.previousElementSibling;
 		}
@@ -192,7 +196,7 @@ class ElementRJS {
 	
 		while(element) {
 			if(element.matches(selector)) {
-				return ElementRJS.retrieve(element);
+				return Element.retrieve(element);
 			}
 			element = element.nextElementSibling;
 		}
@@ -212,11 +216,11 @@ class ElementRJS {
 		
         do {
             if (selector && parent.matches(selector)) {
-            	return ElementRJS.retrieve(parent);
+            	return Element.retrieve(parent);
             }
             parent = parent.parentElement /*|| parent.parentNode*/;
             if(! selector && parent) {
-            	return ElementRJS.retrieve(parent);
+            	return Element.retrieve(parent);
             }
         } while (parent !== null); 
         return null;
@@ -229,7 +233,7 @@ class ElementRJS {
 	 */
 	getChild(selector) {
 		this._htmlElementRequired();
-		return ElementRJS.searchOne(selector, this);
+		return Element.searchOne(selector, this);
 	};
 	
 	/**
@@ -239,7 +243,7 @@ class ElementRJS {
 	 */
 	getChildren(selector) {
 		this._htmlElementRequired();
-		return ElementRJS.searchList(selector, this); 
+		return Element.searchList(selector, this); 
 	};
 	
 	/**
@@ -477,7 +481,7 @@ class ElementRJS {
 	removeChildren() {
 		this._htmlElementRequired();
 		while(this.htmlElement.firstChild) {
-			this.removeChild(ElementRJS.retrieve(this.htmlElement.firstChild));
+			this.removeChild(Element.retrieve(this.htmlElement.firstChild));
 		}
 		return this;
 	};
@@ -494,7 +498,7 @@ class ElementRJS {
 		let allowedProperties = [ 'top', 'left', ],
 			element = this,
 			offset = 0,
-			htmlElementProperty = 'offset' + StringRJS.ucfirst(property)
+			htmlElementProperty = 'offset' + Str.ucfirst(property)
 		; 
 		
 		if(allowedProperties.indexOf(property) == -1) {
@@ -505,7 +509,7 @@ class ElementRJS {
 			offset += element.getProperty(htmlElementProperty);
 			let offsetParent = element.getProperty('offsetParent');
 			if(offsetParent) {
-				element = ElementRJS.retrieve(offsetParent);
+				element = Element.retrieve(offsetParent);
 			} else {
 				element = null;
 			}
@@ -533,7 +537,7 @@ class ElementRJS {
 						return;
 					}
 					
-					let scrollProperty = 'scroll' + StringRJS.ucfirst(property),
+					let scrollProperty = 'scroll' + Str.ucfirst(property),
 						currentScroll = self.getProperty(scrollProperty),
 						stepScroll = currentScroll + (data[property] - currentScroll) * ratio
 					;
@@ -544,7 +548,7 @@ class ElementRJS {
 			}
 		;
 		
-		new AnimationRJS(step, 500);
+		new Animation(step, 500);
 		
 		return this;
 	};
@@ -604,13 +608,13 @@ class ElementRJS {
 		}
 		
 		Object.keys(properties[property]).forEach(function(position) {
-			let styleValue = self.getStyle('margin-' + StringRJS.ucfirst(position)) || 0;
-			dimension += parseInt(StringRJS.replace(styleValue, {
+			let styleValue = self.getStyle('margin-' + Str.ucfirst(position)) || 0;
+			dimension += parseInt(Str.replace(styleValue, {
 				'px': ''
 			}));
 		});
 		
-		dimension += (this.getProperty('offset' + StringRJS.ucfirst(property)) || 0);
+		dimension += (this.getProperty('offset' + Str.ucfirst(property)) || 0);
 		
 		return dimension;
 	};
@@ -625,4 +629,4 @@ class ElementRJS {
 		}
 	};
 	
-}
+};

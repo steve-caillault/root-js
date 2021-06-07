@@ -2,7 +2,7 @@
  * Gestion d'URL ou de pseudo URL
  */
  
-class UrlRJS {
+export default class Url {
 	
 	// url: null,
 	// baseUrl: null,

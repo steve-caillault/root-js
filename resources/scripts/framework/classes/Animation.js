@@ -1,7 +1,7 @@
 /**
  * Gestion d'une animation sur un élément HTML
  */
-class AnimationRJS {
+export default class Animation {
 	
 	// duration: null, // entier en millisecondes
 	// stepFunction: null, // fonction à exécuter pour chaque segment

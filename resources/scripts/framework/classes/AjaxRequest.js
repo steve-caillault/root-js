@@ -1,7 +1,10 @@
 /**
  * Classe gérant un appel Ajax
  */
-class AjaxRequestRJS {
+
+import Url from "Classes/Url";
+
+export class AjaxRequest {
 	
 	// method: null
 	// url: null
@@ -45,7 +48,7 @@ class AjaxRequestRJS {
 		}
 		
 		if(method == 'get') {
-			let url = new UrlRJS(options.url),
+			let url = new Url(options.url),
 				queries = url.queries
 			;
 			
@@ -143,7 +146,7 @@ class AjaxRequestRJS {
 /**
  * Classe gérant un appel Ajax retournant du JSON
  */
-class JsonAjaxRequestRJS extends AjaxRequestRJS {
+export class JsonAjaxRequest extends AjaxRequest {
 	
 	// onValidJsonCallback: null,
 	// onInvalidJsonCallback: null,
@@ -212,7 +215,7 @@ class JsonAjaxRequestRJS extends AjaxRequestRJS {
 /**
  * Classe gérant l'appel Ajax pour le téléchargement d'un fichier
  */
-class UploadAjaxRequestRJS extends JsonAjaxRequestRJS {
+export class UploadAjaxRequest extends JsonAjaxRequest {
 	
 	// isUpload: true
 	
