@@ -94,6 +94,7 @@ Méthode
     object options : objet JSON des paramètres de la requête.
         string url : adresse à appeler.
         string method : méthode HTTP à utiliser. Par défaut, la valeur est get. Les méthodes get et post sont autorisées.
+        object headers : objet JSON des en-tête à envoyer.
         object params : objet JSON des paramètres à transmettre en Ajax.
         function onComplete : fonction à appeler lorsque l'appel est terminé.
         function onSuccess : fonction à appeler lorsque la réponse renvoie un code HTTP 200. Prend en entrée la réponse de l'appel.
@@ -103,6 +104,10 @@ Méthode
 new RootJS.AjaxRequest({ 
   "url": "https://www.something.unk/", 
   "method": "post", 
+  "headers": {
+    "header-1": "header-value-1",
+    "header-2": "header-value-2"
+  },
   "params": { 
     "param1": 10, 
     "param2": "test", 
