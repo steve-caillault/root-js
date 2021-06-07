@@ -6,22 +6,25 @@
  * @return bool|string
  */
 function getArg(key) {
-	var index = process.argv.indexOf(key),
+	let index = process.argv.indexOf(key),
 		next = process.argv[index + 1]
 	;
 	return (index == -1) ? null : (! next || next[0] === "-") ? true : next;
 };
 
  
-var gulp = require('gulp'),
+const 
+	pathModule = require('path'),
+	gulp = require('gulp'),
 	sourcemaps = require('gulp-sourcemaps'),
 	minifyJS = require('gulp-terser'),
 	fs = require('fs'),
 	concat = require('gulp-concat'),
+	webpackStream = require('webpack-stream'),
 	environment = (getArg('--env') || 'development'),
 	environmentsAllowed = [ 'development', 'production', ],
-	withSourceMaps = (environment == 'development'),
-	compressFiles = (environment != 'development')
+	withSourceMaps = (environment === 'development'),
+	compressFiles = (environment !== 'development')
 ;
 
 // Vérification  de l'environment
@@ -35,26 +38,22 @@ if(environmentsAllowed.indexOf(environment) == -1) {
  */
 gulp.task('update-scripts', function() {
 	
-	var files = [],
-		directories = [ 
-			'./resources/scripts/framework/classes/required/',
-			'./resources/scripts/framework/classes/',
-		]
+	let files = [],
+		filePath = './resources/scripts/framework/root.js'
 	;
-	
-	directories.forEach(function(path) {
-		var directoryFiles = fs.readdirSync(path);
-		directoryFiles.forEach(function(currentFile) {
-			var filePath = path + currentFile,
-				fileData = fs.statSync(filePath)
-			;
-			if(fileData.isFile()) {
-				files.push(filePath);
-			}
-		});
-	});
+	files.push(filePath)
 
-	var object = gulp.src(files);
+	let object = gulp.src(files).pipe(webpackStream({
+		mode: environment,
+		output: {
+			library: "RootJS",
+		},
+		resolve: {
+			alias: {
+				Classes: pathModule.resolve(__dirname, "resources/scripts/framework/classes")
+			}
+		}
+	}));
 
 	if(withSourceMaps) {
 		object = object.pipe(sourcemaps.init());

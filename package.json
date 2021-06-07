@@ -1,5 +1,5 @@
 {
-  "name": "Framework-JavaScript-RootJS",
+  "name": "framework-javascript-rootjs",
   "version": "0.0.1",
   "description": "",
   "main": "gulpfile.js",
@@ -12,8 +12,9 @@
   "license": "ISC",
   "devDependencies": {
     "gulp": "^4.0.2",
-    "gulp-sourcemaps": "^2.6.5",
     "gulp-concat": "^2.6.1",
-    "gulp-terser": "^1.2.0"
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-terser": "^2.0.1",
+    "webpack-stream": "^6.1.2"
   }
 }
