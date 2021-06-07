@@ -1,17 +1,19 @@
-var initRootJS = function() {
+
+
+window.initRootJS = function() {
 	console.log("Initialisation.");
 	
-	// Test StringRJS
+	// Test Str
 	let sentence = "test-de-phrase.";
-	sentence = StringRJS.replace(sentence, {"-": " " });
-	console.log(StringRJS.ucfirst(sentence));
+	sentence = RootJS.Str.replace(sentence, {"-": " " });
+	console.log(RootJS.Str.ucfirst(sentence));
 	
 	// Test Integer 
-	console.log(IntegerRJS.random(2, 100));
+	console.log(RootJS.Integer.random(2, 100));
 	
 	// Test Ajax
 	// Succès Texte
-	(new AjaxRequestRJS({
+	(new RootJS.AjaxRequest({
 		'url': 'ajax.php',
 		'params': {
 			'type': 'text'
@@ -23,9 +25,9 @@ var initRootJS = function() {
 			console.log('AjaxRequest 1 success : ' + response);
 		}
 	}));
-	
+
 	// Echec texte 1
-	(new AjaxRequestRJS({
+	(new RootJS.AjaxRequest({
 		'url': 'ajax2.php?type=text',
 		'onComplete': function(response) {
 			console.log('AjaxRequest 2 complete');
@@ -37,8 +39,9 @@ var initRootJS = function() {
 			console.log('AjaxRequest 2 error 1 : ' + response);
 		}
 	}));
+
 	// Echec texte 2
-	(new AjaxRequestRJS({
+	(new RootJS.AjaxRequest({
 		'url': 'ajax.php?key=value&key2=value2',
 		'params': {
 			'type': 'text',
@@ -54,8 +57,9 @@ var initRootJS = function() {
 			console.log('AjaxRequest 3 error : ' + response);
 		}
 	}));
+
 	// Succès JSON Ajax
-	(new JsonAjaxRequestRJS({
+	(new RootJS.JsonAjaxRequest({
 		'url': 'ajax.php?type=json',
 		'onComplete': function() {
 			console.log('AjaxRequest JSON 1 complete');
@@ -64,8 +68,9 @@ var initRootJS = function() {
 			console.log('AjaxRequest JSON 1 success : ', response);
 		}
 	}));
+	
 	// Echec JSON Ajax
-	(new JsonAjaxRequestRJS({
+	(new RootJS.JsonAjaxRequest({
 		'url': 'ajax.php',
 		'method': 'post',
 		'params': {
@@ -83,24 +88,22 @@ var initRootJS = function() {
 		}
 	}));
 	
-	let menu = ElementRJS.searchOne('div.menu');
+	let menu = RootJS.Element.searchOne('div.menu');
 	console.log(menu);
 	
-	console.log(ElementRJS.searchOne('li.selected', menu));
-	
-	ElementRJS.searchList('li', menu).forEach(function(li) {
+	console.log(RootJS.Element.searchOne('li.selected', menu));
+
+	RootJS.Element.searchList('li', menu).forEach(function(li) {
 		console.log(li);
 		li.addEvent('click', function(event) {
-			let element = ElementRJS.retrieve(this),
-				previous = element.getPrevious()
-			;
+			let element = RootJS.Element.retrieve(this);
 			console.log(element);
 		});
 	});
 	
 	// Test sur la recherche d'éléments
-	var contentDiv = ElementRJS.searchOne('div.content'),
-		element = ElementRJS.searchOne("ul.two li.second"),
+	var contentDiv = RootJS.Element.searchOne('div.content'),
+		element = RootJS.Element.searchOne("ul.two li.second"),
 		previous = element.getPrevious("li"),
 		next = previous.getNext("li"),
 		parent = element.getParent('div.page'),
@@ -110,32 +113,32 @@ var initRootJS = function() {
 	;
 	
 	// Vérification sur le même élément
-	let contentDivSameElement = contentDiv.sameElement(ElementRJS.searchOne('div.content')),
-		contentDivNotSameElement = contentDiv.sameElement(ElementRJS.searchOne('li'))
+	let contentDivSameElement = contentDiv.sameElement(RootJS.Element.searchOne('div.content')),
+		contentDivNotSameElement = contentDiv.sameElement(RootJS.Element.searchOne('li'))
 	;
 	
 	console.log('contentDiv.sameElement(ElementRJS.searchOne(\'div.content\') : ' + contentDivSameElement);
 	console.log('contentDiv.sameElement(ElementRJS.searchOne(\'li\') : ' + contentDivNotSameElement);
 	
 	// Test d'ajout d'éléments
-	parent.addElement(new ElementRJS('p', {
+	parent.addElement(new RootJS.Element('p', {
 		'text': 'Paragraphe en haut'
 	}), 'top');
 	
-	parent.addElement(new ElementRJS('p', {
+	parent.addElement(new RootJS.Element('p', {
 		'text': 'Paragraphe en bas'
 	}), 'bottom');
 	
-	contentDiv.addElement(new ElementRJS('p', {
+	contentDiv.addElement(new RootJS.Element('p', {
 		'text': 'Paragraphe avant le contenu'
 	}), 'before');
 	
-	contentDiv.addElement(new ElementRJS('p', {
+	contentDiv.addElement(new RootJS.Element('p', {
 		'text': 'Paragraphe après le contenu',
 		'data-text': 'Paragraphe après le contenu'
 	}), 'after');
 	
-	contentDiv.addElement(new ElementRJS('input', {
+	contentDiv.addElement(new RootJS.Element('input', {
 		'type': 'text'
 	}));
 	
@@ -145,7 +148,7 @@ var initRootJS = function() {
 	console.log('Test child :', child);
 	console.log('Test children: ', children);
 	console.log('test last :', last);
-	
+
 	// Test de modification de propriétés
 	last.setProperty('text', 'Last');
 	last.setProperty('data-last', 1);
@@ -154,7 +157,7 @@ var initRootJS = function() {
 	input.setProperty('value', 'Texte');
 	
 	console.log('Test getProperty Text :', input.getProperty('value'));
-	
+
 	// Test de manipulation de classes
 	last.addClass('last');
 	
@@ -162,24 +165,24 @@ var initRootJS = function() {
 	console.log('Input has class input :', input.hasClass('input-text'));
 	input.removeClass('input-text');
 	console.log('Input has class input after removeClass:', input.hasClass('input-text'));
-	
+
 	// Tests sur les événements
 	
 	parent.getChild('p[data-text]').addEvent('begin-taping', function(param1, param2) {
-		let element = ElementRJS.retrieve(this);
+		let element = RootJS.Element.retrieve(this);
 		console.log(param1);
 		console.log(param2)
 		element.setProperty('text', 'Ecriture en cours...');
 	});
 	
 	parent.getChild('p[data-text]').addEvent('end-taping', function() {
-		let element = ElementRJS.retrieve(this);
+		let element = RootJS.Element.retrieve(this);
 		element.setProperty('text', element.getProperty('data-text'));
 	});
 	
 	input.addEvent('focus', function(event) {
 		parent.getChild('p[data-text]').fireEvent('begin-taping', [ 'param1Value', 'param2Value' ]);
-		let currentElement = ElementRJS.retrieve(this);
+		let currentElement = RootJS.Element.retrieve(this);
 		currentElement.setStyles({
 			'color': 'red'
 		});
@@ -189,7 +192,7 @@ var initRootJS = function() {
 	
 	input.addEvent('blur', function(event) {
 		parent.getChild('p[data-text]').fireEvent('end-taping');
-		let currentElement = ElementRJS.retrieve(this);
+		let currentElement = RootJS.Element.retrieve(this);
 		currentElement.setStyles({
 			'color': 'black'
 		});
@@ -197,8 +200,8 @@ var initRootJS = function() {
 	});
 	
 	// Test de récupération de dimension
-	let fullWidthParagraph = ElementRJS.searchOne('p').getOuterDimension('width'),
-		fullHeightParagraph = ElementRJS.searchOne('p').getOuterDimension('height')
+	let fullWidthParagraph = RootJS.Element.searchOne('p').getOuterDimension('width'),
+		fullHeightParagraph = RootJS.Element.searchOne('p').getOuterDimension('height')
 	;
 	console.log('Largeur avec marge du premier paragraphe : ' + fullWidthParagraph);
 	console.log('Hauteur avec marge du premier paragraphe : ' + fullHeightParagraph);
@@ -209,8 +212,7 @@ var initRootJS = function() {
 	// Test de suppression d'un enfant
 	let childToDeleted = menu.getChild('li.selected');
 	childToDeleted.getParent('ul').removeChild(childToDeleted);
-	
-	//contentDiv.removeChildren();
+	contentDiv.removeChildren();
 	
 	// Calcul des valeurs offset
 	let inputOffsetTop = input.computeOffset('top'),
@@ -220,7 +222,7 @@ var initRootJS = function() {
 	console.log('Input offset left :', inputOffsetLeft);
 	
 	// Gestion de l'offset vertical
-	let buttonOffsetTopControl = new ElementRJS('button', {
+	let buttonOffsetTopControl = new RootJS.Element('button', {
 		'type': 'button',
 		'text': 'Test scrollToTop'
 	});
@@ -230,16 +232,16 @@ var initRootJS = function() {
 			'min-height': '2000px'
 		});
 		
-		let offsetTopTarget = ElementRJS.searchOne('body').getLast('p').computeOffset('top');
-		ElementRJS.retrieve(document.scrollingElement).changeScroll({
+		let offsetTopTarget = RootJS.Element.searchOne('body').getLast('p').computeOffset('top');
+		RootJS.Element.retrieve(document.scrollingElement).changeScroll({
 			'top': offsetTopTarget
 		});
 	});
-	
+
 	contentDiv.addElement(buttonOffsetTopControl);
 	
 	// Gestion de l'offset horizontal
-	let buttonOffsetLeftControl = new ElementRJS('button', {
+	let buttonOffsetLeftControl = new RootJS.Element('button', {
 		'type': 'button',
 		'text': 'Test scrollToLeft'
 	});
@@ -249,7 +251,7 @@ var initRootJS = function() {
 			'min-width': '2000px'
 		});
 		
-		ElementRJS.retrieve(document.scrollingElement).changeScroll({
+		RootJS.Element.retrieve(document.scrollingElement).changeScroll({
 			'left': 1500
 		});
 	});
@@ -257,19 +259,13 @@ var initRootJS = function() {
 	contentDiv.addElement(buttonOffsetLeftControl);
 	
 	// Test de téléchargement de fichier
-	let inputFile = ElementRJS.searchOne('input[type=file]');
-	console.log(inputFile);
+	let inputFile = RootJS.Element.searchOne('input[type=file]');
 	inputFile.addEvent('change', function() {
-		let formData = new FormData;
-		formData.append('file', ElementRJS.retrieve(this).getProperty('files')[0]);
+		let formData = new FormData();
+		formData.append('file', RootJS.Element.retrieve(this).getProperty('files')[0]);
 		formData.append('type', 'upload-file');
 		
-		/*let formData = {
-			type: 'upload-file',
-			file: ElementRJS.retrieve(this).getProperty('files')[0]
-		};*/
-		
-		new UploadAjaxRequestRJS({
+		new RootJS.UploadAjaxRequest({
 			'url': 'ajax.php',
 			'params': formData,
 			'onProgress': function(event) {
@@ -292,5 +288,5 @@ var initRootJS = function() {
 };
 
 document.addEventListener("DOMContentLoaded", function() { 
-	(new ControllerRJS()).execute();
+	(new RootJS.Controller()).execute();
 }, false);
