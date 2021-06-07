@@ -1,21 +1,22 @@
 <?php
 
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-$params = ${ '_' . $method};
+$jsonBody = (bool) ($_GET['json_body'] ?? false);
 
+$params = ($jsonBody) ? json_decode(file_get_contents('php://input'), true) : ${ '_' . $method};
 $type = ($params['type'] ?? 'text');
-$withError = (bool) ($params['with-error'] ?? FALSE);
+$withError = (bool) ($params['with-error'] ?? false);
 
 if($withError)
 {
 	http_response_code(400);
 }
 
-if($type == 'text') 
+if($type === 'text') 
 {
 	exit('Test Ajax ' . date('Y-m-d H:i:s'));
 }
-elseif($type == 'json')
+elseif($type === 'json')
 {
 	$data = [
 		'name' => 'Test Ajax JSON',
@@ -29,7 +30,7 @@ elseif($type == 'json')
 	
 	exit(json_encode($data));
 }
-elseif($type == 'upload-file')
+elseif($type === 'upload-file')
 {
 	$data = $_FILES;
 	exit(json_encode($data));

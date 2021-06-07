@@ -27,6 +27,9 @@ window.initRootJS = function() {
 		},
 		"onSuccess": function(response) {
 			console.log("AjaxRequest 1 success : " + response);
+		},
+		"onError": function(response) {
+			console.log("AjaxRequest 1 error : " + response);
 		}
 	})).execute();
 
@@ -70,6 +73,9 @@ window.initRootJS = function() {
 		},
 		"onSuccess": function(response) {
 			console.log("AjaxRequest JSON 1 success : ", response);
+		},
+		"onError": (response) => {
+			console.log("AjaxRequest JSON 1 error : ", response);
 		}
 	})).execute();
 	
@@ -91,6 +97,27 @@ window.initRootJS = function() {
 			console.log("AjaxRequest JSON 2 error : ", response);
 		}
 	})).execute();
+
+	// Test Ajax en envoyant du JSON en body
+	(new RootJS.JsonAjaxRequest({
+		"method": "post",
+		"url": "ajax.php?json_body=1",
+		"params": {
+			"type": "json"
+		},
+		"sendJsonBody" : true,
+		"onComplete": function() {
+			console.log("AjaxRequest JSON 3 complete");
+		},
+		"onSuccess": function(response) {
+			console.log("AjaxRequest JSON 3 (JSON Body) success : ", response);
+		},
+		"onError": function(response) {
+			console.log("AjaxRequest JSON 3 (JSON Body) error : ", response);
+		}
+	})).execute();
+
+	return;
 	
 	let menu = RootJS.Element.searchOne("div.menu");
 	console.log(menu);

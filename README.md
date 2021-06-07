@@ -83,7 +83,8 @@ fonction d'initialisation de RootJS, mais cela permet d'avoir un seul point d'en
 
 #### AjaxRequest <a id="ajax-request"></a>
 
-La classe *RootJS.AjaxRequest* permet d'exécuter une requête en *Ajax*. Le constructeur d'une requête prend en entrée un objet *JSON*. 
+La classe *RootJS.AjaxRequest* permet d'envoyer une requête en *Ajax*. Le constructeur d'une requête prend en entrée un objet *JSON*.
+La méthode *execute* permet d'envoyer la requête.
 
 Méthode
 
@@ -101,7 +102,7 @@ Méthode
         function onError : fonction à appeler lorsqu'une erreur s'est produite lors de l'appel. Prend en entrée la réponse de l'appel.
 
 ````javascript
-new RootJS.AjaxRequest({ 
+let request = new RootJS.AjaxRequest({ 
   "url": "https://www.something.unk/", 
   "method": "post", 
   "headers": {
@@ -122,7 +123,8 @@ new RootJS.AjaxRequest({
   "onError": function(response) { 
     console.log("Echec de l'appel."); 
   } 
-}); 
+});
+request.execute();
 ````
 
 #### JsonAjaxRequest <a id="json-ajax-request"></a>
@@ -139,6 +141,9 @@ Paramètre
         string url : adresse à appeler.
         string method : méthode HTTP à utiliser. Par défaut, la valeur est get. Les méthodes get et post sont autorisées.
         object params : objet JSON des paramètres à transmettre en Ajax.
+        bool sendJsonBody : envoie les paramètres sous forme de chaine JSON. 
+                            La valeur est à false par défaut. 
+                            Nécessite une requête en post.
         function onComplete : fonction à appeler lorsque l'appel est terminé.
         function onSuccess : fonction à appeler lorsque la réponse renvoie un code HTTP 200. Prend en entrée la réponse de l'appel.
         function onError : fonction à appeler lorsqu'une erreur s'est produite lors de l'appel. Prend en entrée la réponse de l'appel.
@@ -171,7 +176,7 @@ inputFile.addEvent("change", function() {
   let formData = { 
     file: RootJS.Element.retrieve(this).getProperty("files")[0] 
   }; 
-  new RootJS.UploadAjaxRequest({ 
+  let request = new RootJS.UploadAjaxRequest({ 
     "url": "upload.php", 
     "params": formData, 
     "onProgress": function(event) { 
@@ -188,6 +193,7 @@ inputFile.addEvent("change", function() {
         console.log(response); 
       } 
   }); 
+  request.execute();
 }); 
 ````
 
@@ -323,9 +329,9 @@ Retour
 ````
 
 ````javascript
-let anchor = RootJS.Element.searchOne('a'),
-	pararagh = RootJS.Element.searchOne('p'),
-	isSameAnchor = anchor.sameElement(RootJS.Element.searchOne('a')),
+let anchor = RootJS.Element.searchOne("a"),
+	pararagh = RootJS.Element.searchOne("p"),
+	isSameAnchor = anchor.sameElement(RootJS.Element.searchOne("a")),
 	isNotSameAnchor = anchor.sameElement(RootJS.Element.searchOne('p'))
 ;
 ````
@@ -957,7 +963,7 @@ anchor.addEvent("addLog", function(message) {
 anchor.addEvent("click", function(event) { 
   event.preventDefault(); 
   let link = RootJS.Element.retrieve(this); 
-  link.fireEvent("addLog", [ 'Nouveau clic' ]); 
+  link.fireEvent("addLog", [ "Nouveau clic" ]); 
 }); 
 ````
 

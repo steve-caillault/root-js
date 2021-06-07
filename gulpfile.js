@@ -32,7 +32,6 @@ if(environmentsAllowed.indexOf(environment) == -1) {
 	throw 'Environnement incorrect.';
 }
 
-// Gestion des fichiers JavaScript
 /**
  * Concaténe les fichiers JavaScript et minifit le fichier final
  */

@@ -88,8 +88,6 @@ export class AjaxRequest {
 		this.headers = headers;
 		this.sendData = sendData;
 		this.request = null;
-		
-		this.execute();
 	};
 
 	/**
@@ -162,8 +160,17 @@ export class AjaxRequest {
  */
 export class JsonAjaxRequest extends AjaxRequest {
 	
+	// sendJsonBody: false, // Vrai si la requête doit envoyer les paramètres dans une chaine JSON
 	// onValidJsonCallback: null,
 	// onInvalidJsonCallback: null,
+
+	constructor(options) {
+
+		super(options);
+
+		this.sendJsonBody = options.sendJsonBody || false;
+		this.sendData = JSON.stringify(Object.fromEntries(this.sendData));
+	};
 	 
 	/**
 	 * Gestion des fonctions d'appel lorsque 
