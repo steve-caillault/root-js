@@ -18,6 +18,10 @@ window.initRootJS = function() {
 		'params': {
 			'type': 'text'
 		},
+		headers: {
+			"test-header-1": "value-header-1",
+			"test-header-2": "value-header-2"
+		},
 		'onComplete': function() {
 			console.log('AjaxRequest 1 complete');
 		},
@@ -25,6 +29,8 @@ window.initRootJS = function() {
 			console.log('AjaxRequest 1 success : ' + response);
 		}
 	}));
+
+	return;
 
 	// Echec texte 1
 	(new RootJS.AjaxRequest({

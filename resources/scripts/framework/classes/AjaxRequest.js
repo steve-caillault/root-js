@@ -6,10 +6,11 @@ import Url from "Classes/Url";
 
 export class AjaxRequest {
 	
+	// request: null,
 	// method: null
 	// url: null
+	// headers: {}
 	// sendData: null
-	// isUpload: false
 	// onError: null
 	// onSuccess: null
 	// onComplete: null
@@ -19,23 +20,28 @@ export class AjaxRequest {
 
 		options = options || {};
 		
-		// Récupération de la méthode HTTP
+		
 		let self = this,
-			method = (options.method || 'get').toLowerCase(),
-			allowedMethods = [ 'get', 'post' ],
+			// Récupération de la méthode HTTP
+			method = (options.method || "get").toLowerCase(),
+			allowedMethods = [ "get", "post" ],
+			// En-têtes
+			headers = options.headers || {},
 			// Récupération des paramètres à transmettre
 			params = options.params || {},
 			sendData = new FormData()
 		;
+
+		headers["X-Requested-With"] = "XMLHttpRequest";
 	
 		// Validation de la méthode HTTP
 		if(allowedMethods.indexOf(method) === -1) {
-			throw 'Méthode HTTP interdite.';
+			throw "Méthode HTTP interdite.";
 		}
 		
 		// Validation de l'URL de la requête
 		if(! options.url) {
-			throw 'L\'URL de l\'appel Ajax est manquant.';
+			throw "L'URL de l'appel Ajax est manquant.";
 		}
 
 		// Construction des paramètres à transmettre
@@ -47,7 +53,7 @@ export class AjaxRequest {
 			}
 		}
 		
-		if(method == 'get') {
+		if(method == "get") {
 			let url = new Url(options.url),
 				queries = url.queries
 			;
@@ -62,49 +68,50 @@ export class AjaxRequest {
 		// Méthode d'initialisation des méthodes de retour
 		let initCallback = function(type) {
 			self[type] = function(response) {
-				if(options[type] && typeof options[type] === 'function') {
+				if(options[type] && typeof options[type] === "function") {
 					options[type](response);
 				}
 			};
 		};
 		
 		// Méthode à éxécuter une fois l'appel terminé
-		initCallback('onComplete');
+		initCallback("onComplete");
 		// Méthode à exécuter en cas de succès
-		initCallback('onSuccess');
+		initCallback("onSuccess");
 		// Méthode à éxécuter en cas d'échec
-		initCallback('onError');
+		initCallback("onError");
 		// Méthode à éxécuter lors du téléchargement du fichier
-		initCallback('onProgress');
+		initCallback("onProgress");
 
 		this.method = method.toUpperCase();
 		this.url = options.url;
+		this.headers = headers;
 		this.sendData = sendData;
-		this.isUpload = (options.isUpload || false);
+		this.request = null;
 		
 		this.execute();
 	};
-	
+
 	/**
-	 * Exécute la requête
+	 * Prépare la requête XHR pour l'envoi
+	 * @return void
 	 */
-	execute() {
-		
-		var self = this,
+	prepare() {
+		if(this.request !== null) {
+			return;
+		}
+
+		let self = this,
 			request = new XMLHttpRequest()
 		;
-		
+
 		request.open(this.method, this.url);
-		
-		request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-		
-		// Progression du téléchargement
-		if(this.isUpload) {
-			request.upload.onprogress = function(event) {
-				self.onProgress(event);
-			};
-		}
-		
+
+		// Ajout des en-têtes
+		Object.keys(this.headers).forEach((headerKey) => {
+			request.setRequestHeader(headerKey, this.headers[headerKey]);
+		});
+
 		// Méthode en cas d'échec
 		request.onerror = function() {
 			this.onError(this.responseText);
@@ -120,8 +127,15 @@ export class AjaxRequest {
 			}
 		};
 
-		// Envoi de la requête
-		request.send(this.sendData);
+		this.request = request;
+	};
+	
+	/**
+	 * Exécute la requête
+	 */
+	execute() {
+		this.prepare();
+		this.request.send(this.sendData);
 	};
 	
 	/**
@@ -156,18 +170,14 @@ export class JsonAjaxRequest extends AjaxRequest {
 	 */
 	onJsonResponse(response) {
 	
-		let jsonData = {},
-			self = this
-		;
-		
 		try {
-			jsonData = JSON.parse(response);
+			let jsonData = JSON.parse(response);
+			this.onValidJsonCallback(jsonData);
 		} catch(e) {
-			self.onInvalidJsonCallback(response);
+			this.onInvalidJsonCallback(response);
 			return;
 		}
 		
-		this.onValidJsonCallback(jsonData);
 	};
 	
 	/**
@@ -179,12 +189,12 @@ export class JsonAjaxRequest extends AjaxRequest {
 	
 		let self = this;
 	
-		this.onValidJsonCallback = function(json) {
-			self.onError(json);
+		this.onValidJsonCallback = (json) => {
+			this.onError(json);
 		};
 		
-		this.onInvalidJsonCallback = function() {
-			self.onError(null);
+		this.onInvalidJsonCallback = () => {
+			this.onError(null);
 		};
 		
 		this.onJsonResponse(response);
@@ -199,11 +209,11 @@ export class JsonAjaxRequest extends AjaxRequest {
 		
 		let self = this;
 		
-		this.onValidJsonCallback = function(json) {
+		this.onValidJsonCallback = (json) => {
 			self.onSuccess(json)
 		};
 		
-		this.onInvalidJsonCallback = function() {
+		this.onInvalidJsonCallback = () => {
 			self.onError(null);
 		};
 		
@@ -217,13 +227,28 @@ export class JsonAjaxRequest extends AjaxRequest {
  */
 export class UploadAjaxRequest extends JsonAjaxRequest {
 	
-	// isUpload: true
-	
 	constructor(options) {
-		options.isUpload = true;
-		options.method = 'post';
+		options.method = "post";
 		super(options);
 		
 	};
+	
+	/**
+	 * Prépare la requête XHR pour l'envoi
+	 * @return void
+	 */
+	prepare() {
+		if(this.request !== null) {
+			return;
+		}
+
+		super.prepare();
+
+		// Progression du téléchargement
+		this.request.upload.onprogress = (event) => {
+			this.onProgress(event);
+		};
+		
+	}
 	
 };
