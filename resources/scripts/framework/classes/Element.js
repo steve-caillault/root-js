@@ -55,10 +55,10 @@ export default class Element {
 		
 		if(this.htmlElement === null) {
 			this.tagName = tagName;
-			if(this.tagName === 'text') {
-				this.attributes = (typeof attributes === 'string') ? attributes : '';
+			if(this.tagName === "text") {
+				this.attributes = (typeof attributes === "string") ? attributes : "";
 			} else {
-				this.attributes = (typeof attributes === 'object') ? attributes : {};
+				this.attributes = (typeof attributes === "object") ? attributes : {};
 			}
 			this.initHtmlElement();
 		} else { // Si on instancie depuis un objet htmlElement
@@ -94,9 +94,9 @@ export default class Element {
 		var element = document.createElement(this.tagName);
 		// Affectation des propriétés HTML
 		for(var attributeName in this.attributes) {
-			if(attributeName === 'html') {
+			if(attributeName === "html") {
 				element.innerHTML = this.attributes[attributeName];
-			} else if(attributeName === 'text') {
+			} else if(attributeName === "text") {
 				element.appendChild(document.createTextNode(this.attributes[attributeName]));
 			} else {
 				element.setAttribute(attributeName, this.attributes[attributeName]);
@@ -272,27 +272,27 @@ export default class Element {
 	 */
 	addElement(elementHTML, position) {
 		
-		var allowedPositions = [ null, 'before', 'after', 'top', 'bottom' ];
+		var allowedPositions = [ null, "before", "after", "top", "bottom" ];
 		position = (position || null);
 		
 		this._htmlElementRequired();
 		
 		if(allowedPositions.indexOf(position) === -1) {
-			throw 'Position de l\'élément incorrect.';
+			throw "Position de l'élément incorrect.";
 		}
 		
 		switch(position) {
-			case 'bottom': 
+			case "bottom": 
 			case null:
 				this.htmlElement.appendChild(elementHTML.htmlElement);
 				break;
-			case 'after':
+			case "after":
 				this.htmlElement.parentNode.insertBefore(elementHTML.htmlElement, this.htmlElement.nextSibling);
 				break;
-			case 'before':
+			case "before":
 				this.htmlElement.parentNode.insertBefore(elementHTML.htmlElement, this.htmlElement);
 				break;
-			case 'top':
+			case "top":
 				if(this.htmlElement.hasChildNodes()) {
 					this.htmlElement.firstChild.parentNode.insertBefore(elementHTML.htmlElement, this.htmlElement.firstChild);
 				} else {
@@ -314,11 +314,11 @@ export default class Element {
 		
 		this._htmlElementRequired();
 		
-		if(property == 'value' && this.tagName == 'input') {
+		if(property == "value" && this.tagName == "input") {
 			this.htmlElement.value = value;
 		}
 		
-		if(property === 'text') {
+		if(property === "text") {
 			this.htmlElement.innerText = value;
 		} else if(this.htmlElement[property] != undefined) {
 			this.htmlElement[property] = value;
@@ -341,7 +341,7 @@ export default class Element {
 		
 		var value = null;
 		
-		if(property === 'text') {
+		if(property === "text") {
 			value = this.htmlElement.innerText;
 		} else if(property in this.htmlElement) {
 			value = this.htmlElement[property];
@@ -372,7 +372,7 @@ export default class Element {
 		
 		classes.forEach(function(className) {
 			className = className.trim();
-			if(className != '') {
+			if(className !== "") {
 				self.htmlElement.classList.add(className);
 			}
 		});
@@ -415,8 +415,8 @@ export default class Element {
 		
 		this._htmlElementRequired();
 		
-		if(typeof callback !== 'function') {
-			throw 'La méthode de l\'évenement est incorrecte.';
+		if(typeof callback !== "function") {
+			throw "La méthode de l'évenement est incorrecte.";
 		}
 		
 		EventsRJS.add(this, event, callback);
@@ -444,7 +444,7 @@ export default class Element {
 	removeClass(classToDelete) {
 		this._htmlElementRequired();
 		this.htmlElement.classList.remove(classToDelete);
-		this.setProperty('class', this.htmlElement.className);
+		this.setProperty("class", this.htmlElement.className);
 		return this;
 	};
 	
@@ -495,19 +495,19 @@ export default class Element {
 	
 		this._htmlElementRequired();
 		
-		let allowedProperties = [ 'top', 'left', ],
+		let allowedProperties = [ "top", "left", ],
 			element = this,
 			offset = 0,
-			htmlElementProperty = 'offset' + Str.ucfirst(property)
+			htmlElementProperty = "offset" + Str.ucfirst(property)
 		; 
 		
 		if(allowedProperties.indexOf(property) == -1) {
-			throw 'Paramètre de computeOffset incorrect.';
+			throw "Paramètre de computeOffset incorrect.";
 		}
 		
 		do {
 			offset += element.getProperty(htmlElementProperty);
-			let offsetParent = element.getProperty('offsetParent');
+			let offsetParent = element.getProperty("offsetParent");
 			if(offsetParent) {
 				element = Element.retrieve(offsetParent);
 			} else {
@@ -531,13 +531,13 @@ export default class Element {
 		
 		let self = this,
 			step = function(ratio) {
-				[ 'left', 'top' ].forEach(function(property) {
+				[ "left", "top" ].forEach(function(property) {
 					
 					if(isNaN(data[property])) {
 						return;
 					}
 					
-					let scrollProperty = 'scroll' + Str.ucfirst(property),
+					let scrollProperty = "scroll" + Str.ucfirst(property),
 						currentScroll = self.getProperty(scrollProperty),
 						stepScroll = currentScroll + (data[property] - currentScroll) * ratio
 					;
@@ -561,7 +561,7 @@ export default class Element {
 	setStyles(newStyles) {
 		this._htmlElementRequired();
 		
-		let styles = this.getProperty('style');
+		let styles = this.getProperty("style");
 		
 		Object.keys(newStyles).forEach(function(property) {
 			let value = newStyles[property];
@@ -604,17 +604,17 @@ export default class Element {
 		; 
 		
 		if(Object.keys(properties).indexOf(property) == -1) {
-			throw 'Paramètre de getOuterDimension incorrect.';
+			throw "Paramètre de getOuterDimension incorrect.";
 		}
 		
 		Object.keys(properties[property]).forEach(function(position) {
-			let styleValue = self.getStyle('margin-' + Str.ucfirst(position)) || 0;
+			let styleValue = self.getStyle("margin-" + Str.ucfirst(position)) || 0;
 			dimension += parseInt(Str.replace(styleValue, {
-				'px': ''
+				"px": ""
 			}));
 		});
 		
-		dimension += (this.getProperty('offset' + Str.ucfirst(property)) || 0);
+		dimension += (this.getProperty("offset" + Str.ucfirst(property)) || 0);
 		
 		return dimension;
 	};
@@ -625,7 +625,7 @@ export default class Element {
 	 */
 	_htmlElementRequired() {
 		if(this.htmlElement === null) {
-			throw 'L\'élément n\'a pas été initialisé.';
+			throw "L'élément n'a pas été initialisé.";
 		}
 	};
 	

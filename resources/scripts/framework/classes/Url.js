@@ -21,7 +21,7 @@ export default class Url {
 	initBaseURL() {
 		this.baseUrl = this.url;
 		
-		let indexSeparator = this.url.indexOf('?');
+		let indexSeparator = this.url.indexOf("?");
 		
 		if(indexSeparator != -1) {
 			this.baseUrl = this.baseUrl.substring(0, indexSeparator);
@@ -34,8 +34,8 @@ export default class Url {
 	 */
 	initQueries() {
 		
-		let indexSeparator = this.url.indexOf('?'),
-			queryString = '';
+		let indexSeparator = this.url.indexOf("?"),
+			queryString = ""
 		;
 
 		if(indexSeparator != -1) {
@@ -72,7 +72,7 @@ export default class Url {
 		
 		
 		if(countQueries > 0) {
-			url += '?' + this.queries.toString();
+			url += "?" + this.queries.toString();
 			
 		}
 		

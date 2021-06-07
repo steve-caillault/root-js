@@ -16,7 +16,7 @@ export default class Str {
 	static replace(string, replacePairs) {
 		for(var key in replacePairs) {
 			var value = replacePairs[key];
-			string = string.replace(new RegExp(key, 'g'), value);
+			string = string.replace(new RegExp(key, "g"), value);
 		}
 		return string;
 	};
@@ -28,8 +28,8 @@ export default class Str {
 	static uniqueId() {
 		
 		var intervalsByType = {
-				'letter': { 'min': 97, 'max': 122 },
-				'integer': { 'min': 48, 'max': 57 }
+				"letter": { "min": 97, "max": 122 },
+				"integer": { "min": 48, "max": 57 }
 			},
 			characterTypes = Object.keys(intervalsByType),
 			iteration = Integer.random(5, 10),
@@ -44,13 +44,13 @@ export default class Str {
 				
 				intervals = intervalsByType[characterType];
 				if(! identifiers[i]) {
-					identifiers[i] = '';
+					identifiers[i] = "";
 				}
-				identifiers[i] += String.fromCharCode(Integer.random(intervals['min'], intervals['max']));
+				identifiers[i] += String.fromCharCode(Integer.random(intervals["min"], intervals["max"]));
 			}
 		}
 		
-		return identifiers.join('');
+		return identifiers.join("");
 	};
 	
 	/**

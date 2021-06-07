@@ -14,7 +14,7 @@ export default class Controller {
 	execute() {
 		
 		try {
-			if(window.initRootJS && typeof window.initRootJS == 'function') {
+			if(window.initRootJS && typeof window.initRootJS === "function") {
 				window.initRootJS();
 			}
 
