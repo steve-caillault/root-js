@@ -84,7 +84,8 @@ fonction d'initialisation de RootJS, mais cela permet d'avoir un seul point d'en
 #### AjaxRequest <a id="ajax-request"></a>
 
 La classe *RootJS.AjaxRequest* permet d'envoyer une requête en *Ajax*. Le constructeur d'une requête prend en entrée un objet *JSON*.
-La méthode *execute* permet d'envoyer la requête.
+La méthode *execute* permet d'envoyer la requête. Vous pouvez y attacher des callbacks en chainant les méthodes *then*, *catch* et
+*finally*.
 
 Méthode
 
@@ -97,9 +98,6 @@ Méthode
         string method : méthode HTTP à utiliser. Par défaut, la valeur est get. Les méthodes get et post sont autorisées.
         object headers : objet JSON des en-tête à envoyer.
         object params : objet JSON des paramètres à transmettre en Ajax.
-        function onComplete : fonction à appeler lorsque l'appel est terminé.
-        function onSuccess : fonction à appeler lorsque la réponse renvoie un code HTTP 200. Prend en entrée la réponse de l'appel.
-        function onError : fonction à appeler lorsqu'une erreur s'est produite lors de l'appel. Prend en entrée la réponse de l'appel.
 
 ````javascript
 let request = new RootJS.AjaxRequest({ 
@@ -113,18 +111,15 @@ let request = new RootJS.AjaxRequest({
     "param1": 10, 
     "param2": "test", 
     "param3": true 
-  }, 
-  "onComplete": function() { 
-    console.log("Appel terminé."); 
-  }, 
-  "onSuccess": function(response) { 
-    console.log("Appel réussi."); 
-  }, 
-  "onError": function(response) { 
-    console.log("Echec de l'appel."); 
-  } 
+  }
 });
-request.execute();
+request.execute().then((response) => {
+  console.log("Appel réussi."); 
+}).catch((response) => {
+  console.log("Echec de l'appel."); 
+}).finally(() => {
+  console.log("Appel terminé."); 
+});
 ````
 
 #### JsonAjaxRequest <a id="json-ajax-request"></a>
@@ -144,9 +139,6 @@ Paramètre
         bool sendJsonBody : envoie les paramètres sous forme de chaine JSON. 
                             La valeur est à false par défaut. 
                             Nécessite une requête en post.
-        function onComplete : fonction à appeler lorsque l'appel est terminé.
-        function onSuccess : fonction à appeler lorsque la réponse renvoie un code HTTP 200. Prend en entrée la réponse de l'appel.
-        function onError : fonction à appeler lorsqu'une erreur s'est produite lors de l'appel. Prend en entrée la réponse de l'appel.
 
 #### UploadAjaxRequest <a id="upload-ajax-request"></a>
 
@@ -161,10 +153,8 @@ Paramètre
     object options : objet JSON des paramètres de la requête.
         string url : adresse à appeler.
         object params : objet JSON des paramètres à transmettre en Ajax.
-        function onComplete : fonction à appeler lorsque l'appel est terminé.
-        function onSuccess : fonction à appeler lorsque la réponse renvoie un code HTTP 200. Prend en entrée la réponse de l'appel.
-        function onError : fonction à appeler lorsqu'une erreur s'est produite lors de l'appel. Prend en entrée la réponse de l'appel.
-        function onProgress : fonction à appeler pour évaluer la progression du téléchargement. La fonction prend en paramètre un événement de type progress.
+        function onProgress : fonction à appeler pour évaluer la progression du téléchargement. 
+                              La fonction prend en paramètre un événement de type progress.
 
 ````html
 <input type="file" />
@@ -181,19 +171,16 @@ inputFile.addEvent("change", function() {
     "params": formData, 
     "onProgress": function(event) { 
       let percent = 100 * ((event.total != 0) ? (event.loaded / event.total) : 0); 
-        console.log(percent + " % téléchargé."); 
-      }, 
-      "onComplete": function() { 
-        console.log("Fichier téléchargé."); 
-      }, 
-      "onSuccess": function(response) { 
-        console.log("Succès."); 
-      }, 
-      "onError": function(response) { 
-        console.log(response); 
-      } 
+      console.log(percent + " % téléchargé."); 
+    }, 
   }); 
-  request.execute();
+  request.execute().then(() => {
+    console.log("Succès.");
+  }).catch((response) => {
+    console.log("Echec du téléchargement du fichier.", response);
+  }).finally(() => {
+    console.log("Fichier téléchargé."); 
+  });
 }); 
 ````
 
@@ -332,7 +319,7 @@ Retour
 let anchor = RootJS.Element.searchOne("a"),
 	pararagh = RootJS.Element.searchOne("p"),
 	isSameAnchor = anchor.sameElement(RootJS.Element.searchOne("a")),
-	isNotSameAnchor = anchor.sameElement(RootJS.Element.searchOne('p'))
+	isNotSameAnchor = anchor.sameElement(RootJS.Element.searchOne("p"))
 ;
 ````
 

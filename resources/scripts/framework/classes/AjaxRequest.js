@@ -11,10 +11,6 @@ export class AjaxRequest {
 	// url: null
 	// headers: {}
 	// sendData: null
-	// onError: null
-	// onSuccess: null
-	// onComplete: null
-	// onProgress: null
 	
 	constructor(options) {
 
@@ -54,9 +50,7 @@ export class AjaxRequest {
 		}
 		
 		if(method == "get") {
-			let url = new Url(options.url),
-				queries = url.queries
-			;
+			let url = new Url(options.url);
 			
 			sendData.forEach(function(value, key) {
 				url.setQueryParam(key, value);
@@ -64,24 +58,6 @@ export class AjaxRequest {
 			
 			options.url = url.getHref();
 		}
-
-		// Méthode d'initialisation des méthodes de retour
-		let initCallback = function(type) {
-			self[type] = function(response) {
-				if(options[type] && typeof options[type] === "function") {
-					options[type](response);
-				}
-			};
-		};
-		
-		// Méthode à éxécuter une fois l'appel terminé
-		initCallback("onComplete");
-		// Méthode à exécuter en cas de succès
-		initCallback("onSuccess");
-		// Méthode à éxécuter en cas d'échec
-		initCallback("onError");
-		// Méthode à éxécuter lors du téléchargement du fichier
-		initCallback("onProgress");
 
 		this.method = method.toUpperCase();
 		this.url = options.url;
@@ -95,6 +71,7 @@ export class AjaxRequest {
 	 * @return void
 	 */
 	prepare() {
+
 		if(this.request !== null) {
 			return;
 		}
@@ -110,21 +87,6 @@ export class AjaxRequest {
 			request.setRequestHeader(headerKey, this.headers[headerKey]);
 		});
 
-		// Méthode en cas d'échec
-		request.onerror = function() {
-			this.onError(this.responseText);
-		};
-		
-		// Méthode une fois l'appel terminé
-		request.onload = function() {
-			self.onComplete();
-			if(this.status >= 200 && this.status < 300) {
-				self.onResponseSuccess(this.responseText);
-			} else {
-				self.onResponseError(this.responseText);
-			}
-		};
-
 		this.request = request;
 	};
 	
@@ -132,8 +94,26 @@ export class AjaxRequest {
 	 * Exécute la requête
 	 */
 	execute() {
-		this.prepare();
-		this.request.send(this.sendData);
+		return new Promise((resolve, reject) => {
+			this.prepare();
+
+			// Méthode en cas d'erreur
+			this.request.onerror = () => {
+				return reject(this.request.responseText);
+			};
+
+			// Méthode une fois l'appel terminé
+			this.request.onload = () => {
+				let status = this.request.status;
+				if(status >= 200 && status < 300) {
+					return resolve(this.onResponseSuccess(this.request.responseText));
+				} else {
+					return reject(this.onResponseError(this.request.responseText));
+				}
+			};
+
+			this.request.send(this.sendData);
+		});
 	};
 	
 	/**
@@ -142,7 +122,7 @@ export class AjaxRequest {
 	 * @return void
 	 */
 	onResponseError(response) {
-		this.onError(response);
+		return response;
 	};
 	
 	/**
@@ -150,7 +130,7 @@ export class AjaxRequest {
 	 * @param string response Réponse de la requête
 	 */
 	onResponseSuccess(response) {
-		this.onSuccess(response);
+		return response;
 	};
 	
 };
@@ -168,8 +148,13 @@ export class JsonAjaxRequest extends AjaxRequest {
 
 		super(options);
 
+		this.onValidJsonCallback = (json) => json;
+		this.onInvalidJsonCallback = () => null;
+
 		this.sendJsonBody = options.sendJsonBody || false;
-		this.sendData = JSON.stringify(Object.fromEntries(this.sendData));
+		if(this.sendJsonBody) {
+			this.sendData = JSON.stringify(Object.fromEntries(this.sendData));
+		}
 	};
 	 
 	/**
@@ -179,10 +164,9 @@ export class JsonAjaxRequest extends AjaxRequest {
 	
 		try {
 			let jsonData = JSON.parse(response);
-			this.onValidJsonCallback(jsonData);
+			return this.onValidJsonCallback(jsonData);
 		} catch(e) {
-			this.onInvalidJsonCallback(response);
-			return;
+			return this.onInvalidJsonCallback(response);
 		}
 		
 	};
@@ -193,18 +177,7 @@ export class JsonAjaxRequest extends AjaxRequest {
 	 * @return void
 	 */
 	onResponseError(response) {
-	
-		let self = this;
-	
-		this.onValidJsonCallback = (json) => {
-			this.onError(json);
-		};
-		
-		this.onInvalidJsonCallback = () => {
-			this.onError(null);
-		};
-		
-		this.onJsonResponse(response);
+		return this.onJsonResponse(response);
 	};
 	
 	/**
@@ -213,18 +186,7 @@ export class JsonAjaxRequest extends AjaxRequest {
 	 * @return void
 	 */
 	onResponseSuccess(response) {
-		
-		let self = this;
-		
-		this.onValidJsonCallback = (json) => {
-			self.onSuccess(json)
-		};
-		
-		this.onInvalidJsonCallback = () => {
-			self.onError(null);
-		};
-		
-		this.onJsonResponse(response);
+		return this.onJsonResponse(response);
 	};
 	
 };
@@ -234,10 +196,18 @@ export class JsonAjaxRequest extends AjaxRequest {
  */
 export class UploadAjaxRequest extends JsonAjaxRequest {
 	
+	// onProgress: null
+
 	constructor(options) {
 		options.method = "post";
 		super(options);
 		
+		// Méthode à exécuter pendant du téléchargement du fichier
+		this.onProgress = (response) => {
+			if(typeof options.onProgress === "function") {
+				options.onProgress(response);
+			}
+		};
 	};
 	
 	/**

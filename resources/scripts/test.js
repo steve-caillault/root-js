@@ -21,31 +21,25 @@ window.initRootJS = function() {
 		"headers": {
 			"test-header-1": "value-header-1",
 			"test-header-2": "value-header-2"
-		},
-		"onComplete": function() {
-			console.log("AjaxRequest 1 complete");
-		},
-		"onSuccess": function(response) {
-			console.log("AjaxRequest 1 success : " + response);
-		},
-		"onError": function(response) {
-			console.log("AjaxRequest 1 error : " + response);
 		}
-	})).execute();
+	})).execute().then((response) => {
+		console.log("AjaxRequest 1 success : " + response);
+	}).catch((response) => {
+		console.log("AjaxRequest 1 error : " + response);
+	}).finally(() => {
+		console.log("AjaxRequest 1 complete");
+	});
 
 	// Echec texte 1
 	(new RootJS.AjaxRequest({
 		"url": "ajax2.php?type=text",
-		"onComplete": function(response) {
-			console.log("AjaxRequest 2 complete");
-		},
-		"onSuccess": function(response) {
-			console.log("AjaxRequest 2 success : " + response);
-		},
-		"onError": function(response) {
-			console.log("AjaxRequest 2 error 1 : " + response);
-		}
-	})).execute();
+	})).execute().then((response) => {
+		console.log("AjaxRequest 2 success : " + response);
+	}).catch((response) => {
+		console.log("AjaxRequest 2 error 1 : " + response);
+	}).finally(() => {
+		console.log("AjaxRequest 2 complete");
+	});
 
 	// Echec texte 2
 	(new RootJS.AjaxRequest({
@@ -54,31 +48,25 @@ window.initRootJS = function() {
 			"type": "text",
 			"with-error": 1
 		},
-		"onComplete": function(response) {
-			console.log("AjaxRequest 3 complete");
-		},
-		"onSuccess": function(response) {
-			console.log("AjaxRequest 3 success : " + response);
-		},
-		"onError": function(response) {
-			console.log("AjaxRequest 3 error : " + response);
-		}
-	})).execute();
+	})).execute().then((response) => {
+		console.log("AjaxRequest 3 success : " + response);
+	}).catch((response) => {
+		console.log("AjaxRequest 3 error : " + response);
+	}).finally(() => {
+		console.log("AjaxRequest 3 complete");
+	});
 
 	// Succès JSON Ajax
 	(new RootJS.JsonAjaxRequest({
-		"url": "ajax.php?type=json",
-		"onComplete": function() {
-			console.log("AjaxRequest JSON 1 complete");
-		},
-		"onSuccess": function(response) {
-			console.log("AjaxRequest JSON 1 success : ", response);
-		},
-		"onError": (response) => {
-			console.log("AjaxRequest JSON 1 error : ", response);
-		}
-	})).execute();
-	
+		"url": "ajax.php?type=json"
+	})).execute().then((response) => {
+		console.log("AjaxRequest JSON 1 success : ", response);
+	}).catch((response) => {
+		console.log("AjaxRequest JSON 1 error : ", response);
+	}).finally(() => {
+		console.log("AjaxRequest JSON 1 complete");
+	});
+
 	// Echec JSON Ajax
 	(new RootJS.JsonAjaxRequest({
 		"url": "ajax.php",
@@ -87,16 +75,13 @@ window.initRootJS = function() {
 			"type": "json",
 			"with-error": 1  
 		},
-		"onComplete": function() {
-			console.log("AjaxRequest JSON 2 complete");
-		},
-		"onSuccess": function(response) {
-			console.log("AjaxRequest JSON 2 success : ", response);
-		},
-		"onError": function(response) {
-			console.log("AjaxRequest JSON 2 error : ", response);
-		}
-	})).execute();
+	})).execute().then((response) => {
+		console.log("AjaxRequest JSON 2 success : ", response);
+	}).catch((response) => {
+		console.log("AjaxRequest JSON 2 error : ", response);
+	}).finally(() => {
+		console.log("AjaxRequest JSON 2 complete");
+	});
 
 	// Test Ajax en envoyant du JSON en body
 	(new RootJS.JsonAjaxRequest({
@@ -105,19 +90,14 @@ window.initRootJS = function() {
 		"params": {
 			"type": "json"
 		},
-		"sendJsonBody" : true,
-		"onComplete": function() {
-			console.log("AjaxRequest JSON 3 complete");
-		},
-		"onSuccess": function(response) {
-			console.log("AjaxRequest JSON 3 (JSON Body) success : ", response);
-		},
-		"onError": function(response) {
-			console.log("AjaxRequest JSON 3 (JSON Body) error : ", response);
-		}
-	})).execute();
-
-	return;
+		"sendJsonBody" : true
+	})).execute().then((response) => {
+		console.log("AjaxRequest JSON 3 (JSON Body) success : ", response);
+	}).catch((response) => {
+		console.log("AjaxRequest JSON 3 (JSON Body) error : ", response);
+	}).finally(() => {
+		console.log("AjaxRequest JSON 3 complete");
+	});
 	
 	let menu = RootJS.Element.searchOne("div.menu");
 	console.log(menu);
@@ -303,17 +283,14 @@ window.initRootJS = function() {
 				let percent = 100 * ((event.total != 0) ? (event.loaded / event.total) : 0);
 				
 				console.log(percent + " % téléchargé");
-			},
-			"onComplete": function() {
-				console.log("Fichier téléchargé");
-			},
-			"onSuccess": function(response) {
-				console.log("Succès");
-			},
-			"onError": function(response) {
-				console.log(response);
 			}
-		})).execute();
+		})).execute().then(() => {
+			console.log("Fichier téléchargé avec succès.");
+		}).catch(() => {
+			console.log("Echec du téléchargement du fichier.", response);
+		}).finally(() => {
+			console.log("Fichier téléchargé.");
+		});
 
 	});
 };
